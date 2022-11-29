@@ -4,11 +4,10 @@
 
 class Display {
 private:
- Game *game;
- int test;
+//  Game *game;
 
 public:
- Display(Game *game);
+//  Display(Game *game);
 };
 
 #endif

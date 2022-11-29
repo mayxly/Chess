@@ -6,5 +6,5 @@ using namespace std;
 int main () {
     cout << "Welcome to Chess!" << endl;
     Game game{};
-    Display display{&game};
+    // Display display{&game};
 }
