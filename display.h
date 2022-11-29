@@ -5,6 +5,7 @@
 class Display {
 private:
  Game *game;
+ int test;
 
 public:
  Display(Game *game);
