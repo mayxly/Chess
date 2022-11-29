@@ -6,13 +6,10 @@
 class Display {
 private:
  Game *game;
+ int test;
 
 public:
  Display(Game *game);
- void printBoard(Board *b);
- void printMsg(std::string msg);
- void printWin(std::string msg);
- ~Display();
 };
 
 #endif
