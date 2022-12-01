@@ -15,6 +15,8 @@ private:
  
 public:
  Square(int x, int y, Piece *piece = nullptr);
+ void addPiece(Piece *piece);
+ Piece* getPiece();
 };
 
 #endif

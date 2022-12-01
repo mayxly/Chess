@@ -7,6 +7,7 @@ private:
 
 public:
  void printBoard(Board *b);
+ void printSquare(int x, int y, Square s);
  ~Display();
 };
 
