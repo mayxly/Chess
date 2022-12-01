@@ -12,6 +12,7 @@ public:
  void printBoard(Board *b);
  void printMsg(std::string msg);
  
+ void printSquare(int x, int y, Square s);
  ~Display();
 };
 
