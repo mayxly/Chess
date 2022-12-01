@@ -6,16 +6,17 @@
 #include "player.h"
 class Game {
 private:
-//  Display *theDisplay;
- Board *theBoard;
- Player *player1;
- Player *player2;
- int turn;
- int p1score;
- int p2score;
+ Display *display;
+ Board *board;
+ Player *player1 = nullptr;
+ Player *player2 = nullptr;
+ int turn = 0;
+ int p1score = 0;
+ int p2score = 0;
 
 public:
- Game();
+ Game(Display *d);
+ void play();
 };
 
 #endif

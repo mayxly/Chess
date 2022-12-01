@@ -5,7 +5,7 @@ class Human : public Player {
 private:
 
 public:
- Human(char colour, std::string name);
+ Human(std::string colour, std::string name);
 };
 
 #endif

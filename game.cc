@@ -1,5 +1,14 @@
 #include "game.h"
+#include <iostream>
 using namespace std;
 
-Game::Game() : turn{1}, p1score{0}, p2score{0} {}
+Game::Game(Display *d) : display{d} {
+    Board *b = new Board;
+    board = b;
+}
+
+void Game::play() {
+    cout << "Welcome to Chess!" << endl;
+    display->printBoard(board);
+}
 
