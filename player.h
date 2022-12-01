@@ -4,11 +4,11 @@
 
 class Player {
 private:
- char colour;
+ std::string colour;
  std::string name;
 
 public:
- Player(char colour, std::string name);
+ Player(std::string colour, std::string name);
 };
 
 #endif

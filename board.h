@@ -3,7 +3,15 @@
 
 #include <vector>
 #include <memory>
+
 #include "square.h"
+#include "piece.h"
+#include "rook.h"
+#include "king.h"
+#include "queen.h"
+#include "bishop.h"
+#include "knight.h"
+#include "pawn.h"
 
 class Board {
 public:

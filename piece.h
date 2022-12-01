@@ -4,11 +4,11 @@
 
 class Piece {
 private:
- char colour;
+ std::string colour;
  std::string type;
 
 public:
- Piece(char colour, std::string type);
+ Piece(std::string colour, std::string type);
 };
 
 #endif
