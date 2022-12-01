@@ -7,7 +7,7 @@
 
 class Board {
 public:
- std::vector<std::vector<Square>> theBoard; // make the board of all 64 squares     
+ std::vector<std::vector<Square>> board; // make the board of all 64 squares     
 
 public:
  Board();

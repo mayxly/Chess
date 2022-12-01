@@ -4,7 +4,7 @@
 
 using namespace std;
 int main () {
-    cout << "Welcome to Chess!" << endl;
-    Game game{};
-    // Display display{&game};
+    Display *d = new Display{};
+    Game *theGame = new Game{d};
+    theGame->play();
 }
