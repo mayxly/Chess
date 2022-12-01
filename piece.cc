@@ -1,5 +1,5 @@
 #include "piece.h"
 using namespace std;
 
-Piece::Piece(char colour, std::string type) : colour{colour}, type{type} {}
+Piece::Piece(std::string colour, std::string type) : colour{colour}, type{type} {}
 

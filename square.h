@@ -11,12 +11,10 @@ struct Position {
 class Square {
 private:
  Position position;
-//  Piece *piece;
-std::string piece;
-
+ Piece *piece;
+ 
 public:
-//  Square(int x, int y, Piece *piece = nullptr);
- Square(int x, int y, std::string piece);
+ Square(int x, int y, Piece *piece = nullptr);
 };
 
 #endif
