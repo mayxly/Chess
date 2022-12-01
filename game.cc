@@ -3,7 +3,7 @@
 using namespace std;
 
 Game::Game(Display *d) : display{d} {
-    Board *b = new Board;
+    Board *b = new Board{"normal"};
     board = b;
 }
 

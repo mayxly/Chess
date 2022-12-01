@@ -18,7 +18,9 @@ public:
  std::vector<std::vector<Square>> board; // make the board of all 64 squares     
 
 public:
- Board();
+ Board(std::string type);
+ void addPiece(int x, int y, Piece *p);
+ Square& getSquare(int x, int y);
 };
 
 #endif
