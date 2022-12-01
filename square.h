@@ -1,5 +1,6 @@
 #ifndef SQUARE_H
 #define SQUARE_H
+#include "piece.h"
 
 struct Position {
     int x;
@@ -10,10 +11,12 @@ struct Position {
 class Square {
 private:
  Position position;
-//  Piece *piece = nullptr;
+//  Piece *piece;
+std::string piece;
 
 public:
- Square(int x, int y);
+//  Square(int x, int y, Piece *piece = nullptr);
+ Square(int x, int y, std::string piece);
 };
 
 #endif

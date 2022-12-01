@@ -1,13 +1,13 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
-#include "game.h"
 
+#include "board.h"
 class Display {
 private:
-//  Game *game;
 
 public:
-//  Display(Game *game);
+ void printBoard(Board *b);
+ ~Display();
 };
 
 #endif
