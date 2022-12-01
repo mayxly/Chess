@@ -9,6 +9,8 @@ private:
 
 public:
  Piece(std::string colour, std::string type);
+ std::string getColour();
+ std::string getType();
 };
 
 #endif

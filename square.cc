@@ -7,3 +7,10 @@ Square::Square(int x, int y, Piece *piece) : piece{piece}
     position = p;
  }
 
+void Square::addPiece(Piece *piece) {
+   this->piece = piece;
+}
+
+Piece* Square::getPiece() {
+   return piece;
+}
