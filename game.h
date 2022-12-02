@@ -11,8 +11,8 @@ private:
  Player *player1 = nullptr;
  Player *player2 = nullptr;
  int turn = 0;
- int p1score = 0;
- int p2score = 0;
+ //int p1score = 0;
+ //int p2score = 0;
 
 public:
  Game(Display *d);
