@@ -66,7 +66,7 @@ void Game::setup() {
         }
         else if (cmd == "-") {
             cin >> square;
-            // removePiece(square);
+            removePiece(square);
             display->printBoard(board); 
         } 
         else if (cmd == "=") {
@@ -82,14 +82,14 @@ void Game::setup() {
 
 void Game::addPiece(char piece, string square) {
     //Find the x,y coordinates
-    int x = square[0] - 'a';
-    int y = abs((square[1] - '1')-7);
+    int x = abs((square[1] - '1')-7);
+    int y = square[0] - 'a';
 
     //Find the piece & colour
     string colour;
     if (piece >= 'a' && piece <= 'z') {
         colour = "black";
-        piece += 32;
+        piece += ('A' - 'a');
     } else {
         colour = "white";
     }
@@ -97,33 +97,36 @@ void Game::addPiece(char piece, string square) {
     //Add the piece
     if (piece == 'K') {
         King *k = new King{colour};
-        board->getSquare(x, y).addPiece(k);
+        board->getSquare(x, y).setPiece(k);
     }
     else if (piece == 'Q') {
         Queen *q = new Queen{colour};
-        board->getSquare(x, y).addPiece(q);
+        board->getSquare(x, y).setPiece(q);
     }
     else if (piece == 'N') {
         Knight *n = new Knight{colour};
-        board->getSquare(x, y).addPiece(n);
+        board->getSquare(x, y).setPiece(n);
     }
     else if (piece == 'R') {
         Rook *r = new Rook{colour};
-        board->getSquare(x, y).addPiece(r);
+        board->getSquare(x, y).setPiece(r);
     }
     else if (piece == 'B') {
         Bishop *b = new Bishop{colour};
-        board->getSquare(x, y).addPiece(b);
+        board->getSquare(x, y).setPiece(b);
     }
     else if (piece == 'P') {
         Pawn *p = new Pawn{colour};
-        board->getSquare(x, y).addPiece(p);
+        board->getSquare(x, y).setPiece(p);
     }
-
-    cout << "CUR SQUARE" << board->getSquare(x, y).getPiece()->getType() << endl;
 }
 
 
+void Game::removePiece(string square) {
+    int x = abs((square[1] - '1')-7);
+    int y = square[0] - 'a';
+    board->getSquare(x, y).setPiece(nullptr);
+}
     
 
 
