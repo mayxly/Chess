@@ -19,6 +19,7 @@ public:
  void play();
  void setup();
  void addPiece(char piece, std::string square);
+ void removePiece(std::string square);
 };
 
 #endif
