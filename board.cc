@@ -3,8 +3,7 @@ using namespace std;
 
 Board::Board(string type)
 {
-    if (type == "normal")
-    {
+    if (type == "normal") {
         //ROW 8
         vector<Square> row8{
             {0, 0, new Rook{"black"}},
@@ -41,7 +40,7 @@ Board::Board(string type)
         vector<Square> row2;
         for (int i = 0; i < 8; i++)
         {
-            row7.push_back({1, i, new Pawn{"white"}});
+            row2.push_back({1, i, new Pawn{"white"}});
         }
         board.push_back(row2);
 
