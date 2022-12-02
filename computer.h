@@ -5,7 +5,7 @@ class Computer : public Player
 {
 private:
 public:
-    Computer(int level);
+    // Computer(int level);
 };
 
 #endif

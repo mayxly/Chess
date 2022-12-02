@@ -8,14 +8,15 @@ void Display::printBoard(Board *b) {
     int rowNum = 8;
     for (int i = 0; i < 8; i++)
     {
-        cout << rowNum << " ";
+        cout << rowNum << " |";
         rowNum--;
         for (int j = 0; j < 8; j++)
         {
             printSquare(i, j, b->getSquare(i, j));
         }
-        cout << endl;
+        cout << "|" << endl;
     }
+    cout << "\n   abcdefgh\n" << endl;
 }
 
 void Display::printSquare(int x, int y, Square s)
