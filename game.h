@@ -8,7 +8,7 @@ class Game {
 private:
  Display *display;
  Board *board;
-Player *player1 = nullptr;
+ Player *player1 = nullptr;
  Player *player2 = nullptr;
  int turn = 0;
  int p1score = 0;
