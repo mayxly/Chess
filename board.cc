@@ -71,10 +71,6 @@ Board::Board(string type)
     }
 }
 
-// void Board::addPiece(int x, int y, Piece *p)
-// {
-//     board[x][y].addPiece(p);
-// }
 
 Square& Board::getSquare(int x, int y) {
     return *board[x][y];

@@ -17,7 +17,6 @@ void Game::play() {
             string name1;
             string name2;
             board = new Board{"normal"};
-            board = new Board{"normal"};
             string w_player;
             string b_player;
             cin >> w_player;
@@ -48,7 +47,6 @@ void Game::play() {
         }
         else if (command == "setup") {
             board = new Board{"setup"};
-            setup();            board = new Board{"setup"};
             setup();
         }
         else {
@@ -59,90 +57,6 @@ void Game::play() {
     display->printMsg("Welcome to Chess!");
     display->printBoard(board);
 }
-
-
-void Game::setup() {
-    display->printMsg("\nAdd piece\t\t+ <Piece> <Square>");
-    display->printMsg("Remove piece\t\t- <Square>");
-    display->printMsg("Set next colour\t\t= <Colour>");
-    display->printMsg("Finish setup\t\tdone\n");
-    string cmd;
-    string colour;
-    string square;
-    char piece;
-    while (1) {
-        cin >> cmd;
-        if (cmd == "done") {
-            break;
-        } 
-        else if (cmd == "+") {
-            cin >> piece;
-            cin >> square;
-            addPiece(piece, square);
-            display->printBoard(board);
-        }
-        else if (cmd == "-") {
-            cin >> square;
-            // removePiece(square);
-            display->printBoard(board); 
-        } 
-        else if (cmd == "=") {
-            cin >> colour;
-            if (colour == "white") {
-                turn = 1;
-            } else {
-                turn = 2;
-            }
-        } 
-    }
-}
-
-void Game::addPiece(char piece, string square) {
-    //Find the x,y coordinates
-    int x = square[0] - 'a';
-    int y = abs((square[1] - '1')-7);
-
-    //Find the piece & colour
-    string colour;
-    if (piece >= 'a' && piece <= 'z') {
-        colour = "black";
-        piece += 32;
-    } else {
-        colour = "white";
-    }
-
-    //Add the piece
-    if (piece == 'K') {
-        King *k = new King{colour};
-        board->getSquare(x, y).addPiece(k);
-    }
-    else if (piece == 'Q') {
-        Queen *q = new Queen{colour};
-        board->getSquare(x, y).addPiece(q);
-    }
-    else if (piece == 'N') {
-        Knight *n = new Knight{colour};
-        board->getSquare(x, y).addPiece(n);
-    }
-    else if (piece == 'R') {
-        Rook *r = new Rook{colour};
-        board->getSquare(x, y).addPiece(r);
-    }
-    else if (piece == 'B') {
-        Bishop *b = new Bishop{colour};
-        board->getSquare(x, y).addPiece(b);
-    }
-    else if (piece == 'P') {
-        Pawn *p = new Pawn{colour};
-        board->getSquare(x, y).addPiece(p);
-    }
-
-    cout << "CUR SQUARE" << board->getSquare(x, y).getPiece()->getType() << endl;
-}
-
-
-    
-
 
 void Game::setup() {
     display->printMsg("\nAdd piece\t\t+ <Piece> <Square>");
@@ -173,8 +87,10 @@ void Game::setup() {
             cin >> colour;
             if (colour == "white") {
                 turn = 1;
+                display->printMsg("White will start!\n");
             } else {
                 turn = 2;
+                display->printMsg("Black will start!\n");
             }
         } 
     }
