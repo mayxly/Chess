@@ -19,7 +19,6 @@ public:
 
 public:
  Board(std::string type);
- void addPiece(int x, int y, Piece *p);
  Square& getSquare(int x, int y);
 };
 
