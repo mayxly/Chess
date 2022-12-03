@@ -7,6 +7,10 @@ Square::Square(int x, int y, Piece *piece) : piece{piece}
     position = p;
  }
 
+ Square::~Square() {
+   delete piece;
+ }
+
 void Square::setPiece(Piece *piece) {
    this->piece = piece;
 }

@@ -19,6 +19,7 @@ public:
 
 public:
  Board(std::string type);
+ ~Board();
  Square& getSquare(int x, int y);
 };
 
