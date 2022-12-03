@@ -17,6 +17,7 @@ private:
 public:
  Game(Display *d);
  void play();
+ void initGame();
  void setup();
  void addPiece(char piece, std::string square);
  void removePiece(std::string square);

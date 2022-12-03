@@ -16,41 +16,12 @@ Game::~Game() {
 }
 
 void Game::play() {
-    display->printMsg("Play a normal game:\tgame <human/computer[1-4+]> <human/computer[1-4+]>\nStart setup mode:\tsetup\n");
+    display->printMsg("Play a normal game:\t game <human/computer[1-4+]> <human/computer[1-4+]> \nStart setup mode:\tsetup\n");
+    string com;
     string command;
     cin >> command;
     while(true) {
         if (command == "game") {
-            string name1;
-            string name2;
-            board = new Board{"normal"};
-            string w_player;
-            string b_player;
-            cin >> w_player;
-            cin >> b_player;
-            display->printMsg("Enter player1's name:");
-            cin >> name1;
-            if (w_player == "human") {
-                player1 = new Human{"white", name1};
-            } else if (w_player.substr(0,8) == "computer") {
-                char levl = w_player[9];
-                int level = levl - '0';
-                player1 = new Computer{level, "white", name1};
-                break;
-            }
-            display->printMsg("Enter player2's name:");
-            cin >> name2;
-            if (b_player == "human")
-            {
-                player2 = new Human{"white", name2};
-            }
-            else if (b_player == "computer")
-            {
-                char levl = w_player[9];
-                int level = levl - '0';
-                player2 = new Computer{level, "white", name2};
-                break;
-            }
             break;
         }
         else if (command == "setup") {
@@ -60,11 +31,8 @@ void Game::play() {
         }
         else {
             display->printMsg("Error invalid command, please try again!");
-            continue;
         }
     }
-    display->printMsg("\nWelcome to Chess!\n");
-    display->printHelp();
     display->printBoard(board);
     while (1) {
         if (command == "move") {
@@ -108,6 +76,39 @@ void Game::setup() {
                 display->printMsg("Black will start!\n");
             }
         } 
+    }
+}
+
+void Game::initGame() {
+    string name1;
+    string name2;
+    string w_player;
+    string b_player;
+    cin >> w_player;
+    cin >> b_player;
+    display->printMsg("Enter player1's name:");
+    cin >> name1;
+    if (w_player == "human")
+    {
+        player1 = new Human{"white", name1};
+    }
+    else if (w_player.substr(0, 8) == "computer")
+    {
+        char levl = w_player[9];
+        int level = levl - '0';
+        player1 = new Computer{level, "white", name1};
+    }
+    display->printMsg("Enter player2's name:");
+    cin >> name2;
+    if (b_player == "human")
+    {
+        player2 = new Human{"white", name2};
+    }
+    else if (b_player == "computer")
+    {
+        char levl = w_player[9];
+        int level = levl - '0';
+        player2 = new Computer{level, "white", name2};
     }
 }
 
