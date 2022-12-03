@@ -22,22 +22,23 @@ void Game::play() {
     cin >> command;
     while(true) {
         if (command == "game") {
-            board = new Board("normal");
             break;
         }
         else if (command == "setup") {
             board = new Board{"setup"};
             setup();
-            display->printMsg("Choose your players:\t\t<human/computer[1-4+]> <human/computer[1-4+]>");
             break;
         }
         else {
             display->printMsg("Error invalid command, please try again!");
         }
     }
-    initGame();
-    display->printMsg("Welcome to Chess!");
     display->printBoard(board);
+    while (1) {
+        if (command == "move") {
+            
+        }
+    }
 }
 
 void Game::setup() {

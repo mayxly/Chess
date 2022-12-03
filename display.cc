@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "display.h"
 using namespace std;
 
@@ -58,4 +59,13 @@ void Display::printSquare(int x, int y, Square s)
 
 void Display::printMsg(string msg) {
     cout << msg << endl;
+}
+
+void Display::printHelp() {
+    cout << "------------------------COMMAND LIST------------------------" << endl;
+    cout << "Move a human player piece:" << "\t\t" << "move <start> <end>" << endl;
+    cout << "Play a pawn promotion move:" << "\t\t" << "move <start> <end> <type>" << endl;
+    cout << "Move a computer player piece:" << "\t\t" << "move" << endl;
+    cout << "Resign from game:" << "\t\t\t" << "resign" << endl;
+    cout << "Show command list" << "\t\t\t" << "help\n" << endl;
 }
