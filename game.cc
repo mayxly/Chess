@@ -8,6 +8,13 @@ using namespace std;
 
 Game::Game(Display *d) : display{d} {}
 
+Game::~Game() {
+    delete display;
+    delete board;
+    delete player1;
+    delete player2;
+}
+
 void Game::play() {
     display->printMsg("Play a normal game:\tgame <human/computer[1-4+]> <human/computer[1-4+]>\nStart setup mode:\tsetup\n");
     string command;

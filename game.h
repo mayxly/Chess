@@ -20,6 +20,7 @@ public:
  void setup();
  void addPiece(char piece, std::string square);
  void removePiece(std::string square);
+ ~Game(); 
 };
 
 #endif

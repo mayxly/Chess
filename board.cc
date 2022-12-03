@@ -71,6 +71,14 @@ Board::Board(string type)
     }
 }
 
+Board::~Board() {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            delete board[i][j];
+        }
+    }
+}
+
 
 Square& Board::getSquare(int x, int y) {
     return *board[x][y];
