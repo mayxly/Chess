@@ -51,18 +51,26 @@ void Game::play() {
                 player2 = new Computer{level, "white", name2};
                 break;
             }
+            break;
         }
         else if (command == "setup") {
             board = new Board{"setup"};
             setup();
+            break;
         }
         else {
             display->printMsg("Error invalid command, please try again!");
             continue;
         }
     }
-    display->printMsg("Welcome to Chess!");
+    display->printMsg("\nWelcome to Chess!\n");
+    display->printHelp();
     display->printBoard(board);
+    while (1) {
+        if (command == "move") {
+            
+        }
+    }
 }
 
 void Game::setup() {
