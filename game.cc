@@ -3,7 +3,10 @@
 #include "player.h"
 #include "computer.h"
 #include "square.h"
+#include "move.h"
 #include <iostream>
+#include <sstream>
+#include <string>
 using namespace std;
 
 Game::Game(Display *d) : display{d} {}
@@ -36,12 +39,24 @@ void Game::play() {
         }
     }
     initGame();
-    display->printMsg("Welcome to Chess!");
+    display->printMsg("\nWelcome to Chess!\n");
+    display->printHelp();
     display->printBoard(board);
-    while (1) {
-        if (command == "move") {
-            
+    string line;
+    while (getline(cin, line)) {
+        istringstream ss{line};
+        ss >> command;
+        if (command == "help") {
+            display->printHelp();
+            continue;
+        }  
+        else if (command == "move") {
+            string startPos, endPos, upgrade;
+            ss >> startPos >> endPos >> upgrade;
+            move(startPos, endPos, upgrade);
+            continue;
         }
+        turn++;
     }
 }
 
@@ -55,32 +70,38 @@ void Game::setup() {
     string square;
     char piece;
     while (1) {
-        cin >> cmd;
-        if (cmd == "done") {
-            break;
-        } 
-        else if (cmd == "+") {
-            cin >> piece;
-            cin >> square;
-            addPiece(piece, square);
-            display->printBoard(board);
-        }
-        else if (cmd == "-") {
-            cin >> square;
-            removePiece(square);
-            display->printBoard(board); 
-        } 
-        else if (cmd == "=") {
-            cin >> colour;
-            if (colour == "white") {
-                turn = 1;
-                display->printMsg("White will start!\n");
-            } else {
-                turn = 2;
-                display->printMsg("Black will start!\n");
+            cin >> cmd;
+            if (cmd == "done") {
+                if (board->isValid()) {
+                    display->printMsg("Set up complete!\n");
+                    display->printBoard(board);
+                    break;
+                } else {
+                    display->printMsg("Invalid board. Please configure again.\n");
+                    display->printBoard(board);
+                    continue;
+                }
+            } 
+            else if (cmd == "+") {
+                cin >> piece;
+                cin >> square;
+                addPiece(piece, square);
+            }
+            else if (cmd == "-") {
+                cin >> square;
+                removePiece(square);
+            } 
+            else if (cmd == "=") {
+                cin >> colour;
+                if (colour == "white") {
+                    turn = 1;
+                    display->printMsg("White will start!\n");
+                } else {
+                    turn = 2;
+                    display->printMsg("Black will start!\n");
+                }
             }
         } 
-    }
 }
 
 void Game::initGame() {
@@ -121,6 +142,10 @@ void Game::addPiece(char piece, string square) {
     int x = abs((square[1] - '1')-7);
     int y = square[0] - 'a';
 
+    if (!isValidPos(square)) {
+        return;
+    }
+
     //Find the piece & colour
     string colour;
     if (piece >= 'a' && piece <= 'z') {
@@ -154,14 +179,75 @@ void Game::addPiece(char piece, string square) {
     else if (piece == 'P') {
         Pawn *p = new Pawn{colour};
         board->getSquare(x, y).setPiece(p);
+    } else {
+        display->printMsg("Not a valid piece. Try again.");
+        return;
     }
+    display->printBoard(board); 
 }
 
 
 void Game::removePiece(string square) {
     int x = abs((square[1] - '1')-7);
     int y = square[0] - 'a';
+    if (!isValidPos(square)) {
+        return;
+    }
     board->getSquare(x, y).setPiece(nullptr);
+    display->printBoard(board); 
+}
+
+void Game::move(string startPos, string endPos, string upgrade) {
+    Player *currPlayer;
+    if ((turn % 2) != 0) {
+        currPlayer = player1;
+    } else {
+        currPlayer = player2;
+    }
+
+    //human move
+    if (dynamic_cast<Human *>(currPlayer)) {
+        if (!isValidPos(startPos) || !isValidPos(endPos)) {
+            return;
+        }
+        int startx = abs((startPos[1] - '1')-7);
+        int starty = startPos[0] - 'a';
+        int endx = abs((endPos[1] - '1')-7);
+        int endy = endPos[0] - 'a';
+
+        Position start{startx, starty};
+        Position end{endx, endy};
+
+        Move theMove{board, start, end, currPlayer->getColour()};
+        string moveType = theMove.getMoveType();
+        if (moveType == "enpassant") {
+
+        } 
+        else if (moveType == "castle") {
+
+        }
+        else if (moveType == "promotepawn") {
+
+        }
+        else if (moveType == "normalkill") {
+
+        }
+        else if (moveType == "normalmove") {
+
+        }
+    }
+    display->printBoard(board);
+}
+
+bool Game::isValidPos(string square) {
+    int x = abs((square[1] - '1')-7);
+    int y = square[0] - 'a';
+
+    if (x < 0 || x > 7 || y < 0 || y > 7 || square[1] < '1' || square[1] > '8') {
+        display->printMsg("Not a valid coordinate. Try again.");
+        return false;
+    }
+    return true;
 }
     
 

@@ -1,4 +1,5 @@
 #include "board.h"
+#include <iostream>
 using namespace std;
 
 Board::Board(string type)
@@ -83,3 +84,50 @@ Board::~Board() {
 Square& Board::getSquare(int x, int y) {
     return *board[x][y];
 }
+
+bool Board::isValid() {
+    //one white king
+    //one black king
+    int wKingCount = 0;
+    int bKingCount = 0;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            Piece* p = board[i][j]->getPiece();
+            if (p) {
+                if (p->getColour() == "black" && p->getType() == "king") {
+                    bKingCount++;
+                }
+                if (p->getColour() == "white" && p->getType() == "king") {
+                    wKingCount++;
+                }
+            }
+        }
+    }
+    if (wKingCount > 1 || bKingCount > 1) {
+        return false;
+    }
+
+
+    //no pawns on first or last row of board
+    for (int i = 0; i < 8; i++) {
+        Piece* p = board[0][i]->getPiece();
+        if (p) {
+            if (p->getType() == "pawn") {
+                return false;
+            }
+        }
+        p = board[7][i]->getPiece();
+        if (p) {
+            if (p->getType() == "pawn") {
+                return false;
+            }
+        }
+    }
+    
+    //neither king is in check
+    //WRITE HERE
+
+    return true;
+}
+
+

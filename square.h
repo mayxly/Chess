@@ -9,7 +9,7 @@ private:
  
 public:
  Square(int x, int y, Piece *piece = nullptr);
- ~Square();
+//  ~Square();
  void setPiece(Piece *piece);
  Piece* getPiece();
 };

@@ -10,12 +10,17 @@
 class Move {
 protected:
     Board *board;
-    Position cur;
-    Position dest;
+    Position start;
+    Position end;
     std::string colour;
 
 public:
-    Move(Board* b, Position cur, Position dest, std::string colour);
+    Move(Board* b, Position start, Position end, std::string colour);
+    bool isValid();
+    bool isValidPath();
+    std::string getMoveType();
+    bool isEnpassant();
+    bool isNormalKill();
 };
 
 #endif

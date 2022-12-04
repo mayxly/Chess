@@ -10,9 +10,9 @@ private:
  Board *board;
  Player *player1 = nullptr;
  Player *player2 = nullptr;
- int turn = 0;
- //int p1score = 0;
- //int p2score = 0;
+ int turn = 1;
+ int p1score = 0;
+ int p2score = 0;
 
 public:
  Game(Display *d);
@@ -21,6 +21,8 @@ public:
  void setup();
  void addPiece(char piece, std::string square);
  void removePiece(std::string square);
+ void move(std::string startPos, std::string endPos, std::string upgrade);
+ bool isValidPos(std::string square);
  ~Game(); 
 };
 
