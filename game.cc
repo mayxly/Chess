@@ -221,7 +221,7 @@ void Game::move(string startPos, string endPos, string upgrade) {
         Move theMove{board, start, end, currPlayer->getColour()};
         string moveType = theMove.getMoveType();
         if (moveType == "enpassant") {
-
+            
         } 
         else if (moveType == "castle") {
 

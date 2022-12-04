@@ -70,6 +70,8 @@ Board::Board(string type)
             board.push_back(row);
         }
     }
+    Position p{-1, -1};
+    recentPawnPos = p;
 }
 
 Board::~Board() {
@@ -130,4 +132,11 @@ bool Board::isValid() {
     return true;
 }
 
+Position Board::getRecentPawnPos() {
+    return recentPawnPos;
+}
+
+void Board::setRecentPawnPos(Position p) {
+    this->recentPawnPos = p;
+}
 
