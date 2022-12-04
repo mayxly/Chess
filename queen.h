@@ -9,6 +9,9 @@ private:
 
 public:
  Queen(std::string colour);
+ std::vector<Position> getMoves(Position curpos) override;
+ std::vector<Position> getCaptureMoves(Position curpos) override;
+ ~Queen();
 };
 
 #endif

@@ -61,6 +61,12 @@ void Display::printMsg(string msg) {
     cout << msg << endl;
 }
 
+void Display::printScore(int p1score, int p2score) {
+    cout << "Final Score:" << endl;
+    cout << "White: " << p1score << endl;
+    cout << "Black: " << p2score << endl;
+}
+
 void Display::printHelp() {
     cout << "------------------------COMMAND LIST------------------------" << endl;
     cout << "Move a human player piece:" << "\t\t" << "move <start> <end>" << endl;
