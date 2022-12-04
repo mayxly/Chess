@@ -15,13 +15,16 @@
 
 class Board {
 public:
- std::vector<std::vector<Square*>> board; // make the board of all 64 squares     
+ std::vector<std::vector<Square*>> board; // make the board of all 64 squares
+ Position recentPawnPos; //to check enpassant
 
 public:
  Board(std::string type);
  ~Board();
  Square& getSquare(int x, int y);
  bool isValid();
+ Position getRecentPawnPos();
+ void setRecentPawnPos(Position p);
 };
 
 #endif
