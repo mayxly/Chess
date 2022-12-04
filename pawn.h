@@ -10,7 +10,7 @@ private:
 public:
  Pawn(std::string colour);
  std::vector<Position> getMoves(Position curpos) override;
- std::vector<Position> getCaptureMoves(Position curpos) override;
+ std::vector<Position> getCaptureMoves(Position curpos);
  ~Pawn();
 };
 

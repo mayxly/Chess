@@ -19,8 +19,10 @@ public:
     bool isValid();
     bool isValidPath();
     std::string getMoveType();
+    bool isCastle();
     bool isEnpassant();
     bool isNormalKill();
+    bool isPromotepawn();
 };
 
 #endif

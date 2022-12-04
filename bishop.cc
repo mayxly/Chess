@@ -26,8 +26,4 @@ std::vector<Position> Bishop::getMoves(Position curpos) {
     return moves;
 }
 
-std::vector<Position> Bishop::getCaptureMoves(Position curpos) {
-    return getMoves(curpos);
-}
-
 Bishop::~Bishop() {}
