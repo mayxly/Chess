@@ -18,25 +18,25 @@ bool Move::isValid() {
         return false;
     }
     if (isValidPath()) {
-        // vector <Position> validMoves = curPiece->getMoves(start);
-        // int len = validMoves.size();
+        vector <Position> validMoves = curPiece->getMoves(start);
+        int len = validMoves.size();
         if (!pieceToKill) {    //no piece to kill, just move to square
-            // for (int i = 0; i < len; i++) {
-            //     if (validMoves[i].x == end.x && validMoves[i].y == end.y) {
-            //         return true;
-            //     }
-            // }
+            for (int i = 0; i < len; i++) {
+                if (validMoves[i].x == end.x && validMoves[i].y == end.y) {
+                    return true;
+                }
+            }
             return false;
         }
         else {      //piece to kill
             if (pieceToKill->getColour() == colour) {   //kill same colour
                 return false;   
             } else {
-                // for (int i = 0; i < len; i++) {
-                //     if (validMoves[i].x == end.x && validMoves[i].y == end.y) {
-                //         return true;
-                //     }
-                // }
+                for (int i = 0; i < len; i++) {
+                    if (validMoves[i].x == end.x && validMoves[i].y == end.y) {
+                        return true;
+                    }
+                }
                 return false;
             }
         }
@@ -123,7 +123,42 @@ string Move::getMoveType() {
     return "normalMove";
 }
 
+bool Move::isCastle() { //king moves two squares towards rook
+    Piece *curPiece = board->getSquare(start.x, start.y).getPiece();
+    if (curPiece && curPiece->getType() == "king" && !curPiece->gethasMoved() && isValidPath()) {
+        Piece *rook;
+        if (start.y + 2 == end.y) { //king side castle
+            if (curPiece->getColour() == "white") {
+                rook = board->getSquare(7,7).getPiece();
+
+            } else {
+                rook = board->getSquare(0,7).getPiece();
+            }
+        } else {
+            if (curPiece->getColour() == "white") {
+                rook = board->getSquare(7,0).getPiece();
+                if (board->getSquare(7, 1).getPiece() != nullptr) { //queen side castle check clear path
+                    return false;
+                }
+            } else {
+                rook = board->getSquare(0,0).getPiece();
+                if (board->getSquare(0, 1).getPiece() != nullptr) { //queen side castle check clear path
+                    return false;
+                }
+            }
+        }
+        if (rook && rook->getType() == "rook" && !rook->gethasMoved()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Move::isEnpassant() {
+    return true;
+}
+
+bool Move::isPromotepawn() {
     return true;
 }
 

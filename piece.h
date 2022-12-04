@@ -25,7 +25,6 @@ private:
 public:
  Piece(std::string colour, std::string type);
  virtual std::vector<Position> getMoves(Position curpos) = 0;
- virtual std::vector<Position> getCaptureMoves(Position curpos) = 0;
  std::string getColour();
  std::string getType();
  bool gethasMoved();

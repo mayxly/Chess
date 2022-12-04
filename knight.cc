@@ -3,10 +3,6 @@ using namespace std;
 
 Knight::Knight(std::string colour) : Piece{colour, "knight"} {}
 
-std::vector<Position> Knight::getCaptureMoves(Position curpos) {
-    return getMoves(curpos);
-}
-
 std::vector<Position> Knight::getMoves(Position curpos) {
     vector<Position> moves;
     int row = curpos.x;
