@@ -1,4 +1,5 @@
 #include "board.h"
+#include "move.h"
 #include <iostream>
 using namespace std;
 
@@ -87,7 +88,7 @@ Square& Board::getSquare(int x, int y) {
     return *board[x][y];
 }
 
-bool Board::isValid() {
+int Board::isValid() {
     //one white king
     //one black king
     int wKingCount = 0;
@@ -106,7 +107,7 @@ bool Board::isValid() {
         }
     }
     if (wKingCount > 1 || bKingCount > 1) {
-        return false;
+        return 1;
     }
 
 
@@ -115,21 +116,21 @@ bool Board::isValid() {
         Piece* p = board[0][i]->getPiece();
         if (p) {
             if (p->getType() == "pawn") {
-                return false;
+                return 2;
             }
         }
         p = board[7][i]->getPiece();
         if (p) {
             if (p->getType() == "pawn") {
-                return false;
+                return 2;
             }
         }
     }
-    
     //neither king is in check
-    //WRITE HERE
-
-    return true;
+    if (isCheck("black") || isCheck("white")) {
+        return 3;
+    }
+    return 0;
 }
 
 Position Board::getRecentPawnPos() {
@@ -140,3 +141,92 @@ void Board::setRecentPawnPos(Position p) {
     this->recentPawnPos = p;
 }
 
+bool Board::isCheck(std::string colour) {
+    Position kingPos{0, 0};
+    for (int i = 0; i < 8; i++) { //look for your king
+		for (int j = 0; j < 8; j++) {
+            Piece *p  = board[i][j]->getPiece();
+            if (p && p->getType() == "king" && p->getColour() == colour) {
+                kingPos.x = i;
+                kingPos.y = j;
+            }
+        }
+    }
+    for (int i = 0; i < 8; i++) { //look for other opponent pieces
+		for (int j = 0; j < 8; j++) {
+            Piece *p  = board[i][j]->getPiece();
+            if (p && p->getColour() != colour) {
+                Board *b = this;
+                Move curMove{b, Position{i, j}, kingPos, p->getColour()};
+                if (curMove.isValid()) {
+                     return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+
+bool Board::isCheckmate(std::string colour) {
+    bool movePossible = this->isMovePossible(colour);
+    if (movePossible) {
+        return false;
+    } else {
+        if (colour == "white" && isCheck("white")) {
+            return true;
+        } 
+        else if (colour == "black" && isCheck("black")) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Board::isMovePossible(std::string colour) {
+    vector <Position> movesPossible;
+    for (int i = 0; i < 8; i++) { //check each piece for possible moves
+		for (int j = 0; j < 8; j++) {
+            Piece *p = this->getSquare(i, j).getPiece();
+            if (p && p->getColour() == colour) {
+                movesPossible =  p->getMoves(Position{i, j});
+                if (p->getType() == "pawn") {   //pawn has different capture moves
+                    Pawn *pawn = dynamic_cast<Pawn *>(p);
+                    vector <Position> killsPossible = pawn->getCaptureMoves(Position{i, j});
+                    movesPossible.insert(movesPossible.end(), killsPossible.begin(), killsPossible.end());
+                }
+                int len = movesPossible.size();
+                for (int i = 0; i < len; i++) {
+                    Board *b = this;
+                    Move curMove{b, Position{i, j}, movesPossible[i], p->getColour()};
+                    if (curMove.isValid()) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+// vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
+//     for ()
+// }
+
+State Board::getState() { //this is incorrect... need stalemate
+    if (this->isCheckmate("white")) {
+        return State::WhiteCheckmate;
+    }
+    else if (this->isCheckmate("black")) {
+        return State::BlackCheckmate;
+    }
+    else if (this->isCheck("white")) {
+        return State::WhiteCheckmate;
+    }
+    else if (this->isCheck("black")) {
+        return State::BlackCheckmate;
+    }
+    else {
+        return State::Normal;
+    }
+}
