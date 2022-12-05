@@ -45,6 +45,10 @@ bool Move::isValid() {
     }
 }
 
+bool Move::isKingSafe() {
+    return true;
+}
+
 
 bool Move::isValidPath() {
     Piece *p = board->getSquare(start.x, start.y).getPiece();

@@ -23,6 +23,7 @@ public:
     bool isPromotepawn();
     bool isCastle();
     bool isNormalKill();
+    bool isKingSafe();
 };
 
 #endif
