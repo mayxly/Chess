@@ -3,6 +3,15 @@ using namespace std;
 
 Pawn::Pawn(std::string colour) : Piece{colour, "pawn"} {}
 
+Piece* Pawn::clone() {
+    Piece *newB = new Pawn{getColour()};
+    if (gethasMoved())
+    {
+        newB->sethasMoved();
+    }
+    return newB;
+}
+
 std::vector<Position> Pawn::getCaptureMoves(Position curpos) {
     vector<Position> moves;
     int row = curpos.x;

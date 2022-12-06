@@ -170,3 +170,5 @@ bool Move::isNormalKill() {
     return false;
 }
 
+//Move::~Move() {}
+

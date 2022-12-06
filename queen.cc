@@ -3,6 +3,16 @@ using namespace std;
 
 Queen::Queen(std::string colour) : Piece{colour, "queen"} {}
 
+Piece* Queen::clone()
+{
+    Piece *newB = new Queen{getColour()};
+    if (gethasMoved())
+    {
+        newB->sethasMoved();
+    }
+    return newB;
+}
+
 std::vector<Position> Queen::getMoves(Position curpos) {
     vector<Position> moves;
     int row = curpos.x;

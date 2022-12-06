@@ -10,6 +10,7 @@ private:
 public:
  Queen(std::string colour);
  std::vector<Position> getMoves(Position curpos) override;
+ Piece *clone() override;
  ~Queen();
 };
 

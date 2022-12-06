@@ -10,6 +10,7 @@ private:
 public:
  Rook(std::string colour);
  std::vector<Position> getMoves(Position curpos) override;
+ Piece *clone() override;
  ~Rook();
 };
 

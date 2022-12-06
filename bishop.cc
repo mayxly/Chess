@@ -3,6 +3,14 @@ using namespace std;
 
 Bishop::Bishop(std::string colour) : Piece{colour, "bishop"} {}
 
+Piece* Bishop::clone() {
+    Piece *newB = new Bishop{getColour()};
+    if (gethasMoved()) {
+        newB->sethasMoved();
+    }
+    return newB;
+}
+
 std::vector<Position> Bishop::getMoves(Position curpos) {
     vector<Position> moves;
     int row = curpos.x;
