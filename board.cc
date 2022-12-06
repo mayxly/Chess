@@ -211,15 +211,15 @@ bool Board::isMovePossible(std::string colour) {
                 //     movesPossible.insert(movesPossible.end(), killsPossible.begin(), killsPossible.end());
                 // }
                 int len = movesPossible.size();
-                cout << "LENGTH EACH PIECE " << len << endl;
+                //cout << "LENGTH EACH PIECE " << len << endl;
                 for (int x = 0; x < len; x++) {
                     Board *b = this;
                     Move curMove{b, Position{i, j}, movesPossible[x], p->getColour()};
                     if (curMove.isKingSafe()) {
-                        cout << "true baby" << endl;
+                        //cout << "true baby" << endl;
                         return true;
                     } else {
-                        cout << "boo" << endl;
+                        //cout << "boo" << endl;
                     }
                 }
             }
@@ -259,8 +259,8 @@ vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
         }
     }
 
-    random_shuffle(retval.begin(), retval.end());
-    random_shuffle(retval.begin(), retval.end());
+    //random_shuffle(retval.begin(), retval.end());
+    //random_shuffle(retval.begin(), retval.end());
     return retval;
 }
 

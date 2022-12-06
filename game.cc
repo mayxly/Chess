@@ -20,7 +20,7 @@ Game::~Game() {
 }
 
 void Game::play() {
-    display->printMsg("Play a normal game:\tgame <human/computer[1-4+]> <human/computer[1-4+]>\nStart ()) mode:\tsetup\n");
+    display->printMsg("Play a normal game:\tgame <human/computer[1-4+]> <human/computer[1-4+]>\nStart setup mode:\tsetup\n");
     string com;
     string command;
     cin >> command;
@@ -60,7 +60,6 @@ void Game::play() {
             move(startPos, endPos, upgrade);
             continue;
         }
-        turn++;
     }
 }
 
@@ -139,7 +138,7 @@ void Game::initGame() {
     cin >> name2;
     if (b_player == "human")
     {
-        player2 = new Human{"white", name2};
+        player2 = new Human{"black", name2};
     }
     else if (b_player == "computer")
     {
@@ -211,10 +210,12 @@ void Game::removePiece(string square) {
 
 void Game::move(string startPos, string endPos, string upgrade) {
     Player *currPlayer;
+    cout << "Turn count: " << turn << endl;
     if ((turn % 2) != 0) {
         currPlayer = player1;
         display->printMsg("It's player 1's turn!");
     } else {
+        cout << "player2 is playing" << endl;
         currPlayer = player2;
         display->printMsg("It's player 2's turn!");
     }
@@ -231,7 +232,7 @@ void Game::move(string startPos, string endPos, string upgrade) {
 
         Position start{startx, starty};
         Position end{endx, endy};
-
+        cout << currPlayer->getColour() << endl;
         Move theMove{board, start, end, currPlayer->getColour()};
         if (theMove.isValid()) {
             cout << "VALID" << endl;
@@ -243,34 +244,46 @@ void Game::move(string startPos, string endPos, string upgrade) {
 
             
         // } 
-        // else if (moveType == "castle") {
-
-        // }
-        /*
-        else if (moveType == "promotepawn") {
+         if (moveType == "castle") {
+            if (board->getSquare(start.x, start.y).getPiece()->gethasMoved()) {
+                display->printMsg("Not a valid move. Try again!");
+            }
+                bool rookMove = theMove.castleMove(); //return true if rook hasn't moved before and false otherwise
+                if (!rookMove) {
+                    display->printMsg("Not a valid move. Try again!");
+                }
+                turn++;
+        }
+        if (moveType == "promotepawn") {
             display->printMsg("What would you like to promote the pawn to: <rook, knight, bishop, queen>");
             string promote;
-            while(cin >> promote) {
-                if (promote != "rook" || promote != "knight" || promote != "bishop" || promote != "queen") {
+            cin >> promote;
+                if (promote != "rook" && promote != "knight" && promote != "bishop" && promote != "queen") {
                     display->printMsg("Invalid piece, please try again!");
                 } else {
-                    break;
+                    theMove.promoteMove(promote);
                 }
-            }
-            Move pmove = new promoteMove{board, start, end, currPlayer->getColour()};
-            board = pmove->movePiece();
-            delete pmove;
+                turn++;
         }
         else if (moveType == "normalkill") {
-            Move kmove = new killMove{board, start, end, currPlayer->getColour()};
-            board = kmove->movePiece();
-            delete kmove;
-        }
-        */
-        if (moveType == "normalmove") {
+            theMove.killMove();
+            turn++;
+        } else if (moveType == "normalmove") {
             cout << "in the normal move" << endl;
-            Move theMove{board, start, end, currPlayer->getColour()};
-            theMove.normalMove();
+            if (board->getSquare(start.x, start.y).getPiece()->getType() == "pawn") {
+                int wdistance = start.x - end.x;
+                int bdistance = end.x - start.x;
+                if (board->getSquare(start.x, start.y).getPiece()->gethasMoved() && (wdistance > 1 || bdistance > 1)) {
+                    display->printMsg("Not a valid move. Try again!");
+                } else {
+                    theMove.normalMove();
+                }
+            } else {
+                theMove.normalMove();
+            }
+            turn++;
+        } else if (moveType == "Invalid move") {
+            display->printMsg("Invalid Move, try again!");
         }
     display->printBoard(board);
     }
