@@ -8,7 +8,7 @@ Piece* King::clone()
     Piece *newB = new King{getColour()};
     if (gethasMoved())
     {
-        newB->sethasMoved();
+        newB->setHasMoved(true);
     }
     return newB;
 }

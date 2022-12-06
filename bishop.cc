@@ -6,7 +6,7 @@ Bishop::Bishop(std::string colour) : Piece{colour, "bishop"} {}
 Piece* Bishop::clone() {
     Piece *newB = new Bishop{getColour()};
     if (gethasMoved()) {
-        newB->sethasMoved();
+        newB->setHasMoved(true);
     }
     return newB;
 }

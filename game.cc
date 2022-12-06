@@ -261,6 +261,7 @@ void Game::move(string startPos, string endPos, string upgrade) {
         }*/
     }
     display->printBoard(board);
+    }
 }
 
 bool Game::isValidPos(string square) {

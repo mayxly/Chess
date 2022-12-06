@@ -7,7 +7,7 @@ Piece* Rook::clone() {
     Piece *newB = new Rook{getColour()};
     if (gethasMoved())
     {
-        newB->sethasMoved();
+        newB->setHasMoved(true);
     }
     return newB;
 }

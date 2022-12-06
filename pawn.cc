@@ -7,7 +7,7 @@ Piece* Pawn::clone() {
     Piece *newB = new Pawn{getColour()};
     if (gethasMoved())
     {
-        newB->sethasMoved();
+        newB->setHasMoved(true);
     }
     return newB;
 }

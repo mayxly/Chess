@@ -8,7 +8,7 @@ Piece* Queen::clone()
     Piece *newB = new Queen{getColour()};
     if (gethasMoved())
     {
-        newB->sethasMoved();
+        newB->setHasMoved(true);
     }
     return newB;
 }

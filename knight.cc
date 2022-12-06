@@ -8,7 +8,7 @@ Piece* Knight::clone()
     Piece *newB = new Knight{getColour()};
     if (gethasMoved())
     {
-        newB->sethasMoved();
+        newB->setHasMoved(true);
     }
     return newB;
 }
