@@ -1,4 +1,5 @@
 #include "pawn.h"
+#include <iostream>
 using namespace std;
 
 Pawn::Pawn(std::string colour) : Piece{colour, "pawn"} {}
@@ -38,6 +39,9 @@ std::vector<Position> Pawn::getCaptureMoves(Position curpos) {
         }
     }
     moves = remove(moves);
+    // for ( auto i : moves) {
+    //     cout << "possible move: " << i.x << i.y << endl;
+    // }
     return moves;
 }
 
@@ -50,7 +54,7 @@ std::vector<Position> Pawn::getMoves(Position curpos) {
         m1.x = row+1;
         m1.y = col;
         moves.emplace_back(m1);
-        if (!gethasMoved()) {
+        if (gethasMoved() == false) {
             m2.x = row+2;
             m2.y = col;
             moves.emplace_back(m2);
@@ -59,7 +63,7 @@ std::vector<Position> Pawn::getMoves(Position curpos) {
         m1.x = row - 1;
         m1.y = col;
         moves.emplace_back(m1);
-        if (!gethasMoved())
+        if (gethasMoved() == false)
         {
             m2.x = row - 2;
             m2.y = col;

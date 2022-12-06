@@ -1,4 +1,5 @@
 #include "move.h"
+#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -17,18 +18,25 @@ bool Move::isValid() {
     if (curPiece->getColour() != colour) { //start pos piece does not belongs to them
         return false;
     }
-    if (isValidPath()) {
+    if (isValidPath() && isKingSafe()) {
+        cout << "MADE IT" << endl;
         vector <Position> validMoves = curPiece->getMoves(start);
         int len = validMoves.size();
         if (!pieceToKill) {    //no piece to kill, just move to square
+        cout << "MADE IT2" << endl;
             for (int i = 0; i < len; i++) {
                 if (validMoves[i].x == end.x && validMoves[i].y == end.y) {
+                    cout << "SECOND TIME" << validMoves[i].x << validMoves[i].y << endl;
                     return true;
                 }
             }
             return false;
         }
         else {      //piece to kill
+            if (curPiece->getType() == "pawn") { //pawn has different capture moves
+                Pawn *pawn = dynamic_cast<Pawn *>(curPiece);
+                validMoves = pawn->getCaptureMoves(start);
+            }
             if (pieceToKill->getColour() == colour) {   //kill same colour
                 return false;   
             } else {
@@ -46,9 +54,23 @@ bool Move::isValid() {
 }
 
 bool Move::isKingSafe() {
-    return true;
+    Square startSquare = board->getSquare(start.x, start.y);
+    Square endSquare = board->getSquare(end.x, end.y);
+    bool safe = true;
+    Piece *tempPieceStart = startSquare.getPiece();
+    Piece *tempPieceEnd = endSquare.getPiece();
+    startSquare.setPiece(nullptr);
+    endSquare.setPiece(tempPieceStart);
+    if (colour == "white" && board->isCheck("white")) {
+        safe = false;
+    }
+    else if (colour == "black" && board->isCheck("black")) {
+        safe = false;
+    }
+    startSquare.setPiece(tempPieceStart);
+    endSquare.setPiece(tempPieceEnd);
+    return safe;
 }
-
 
 bool Move::isValidPath() {
     Piece *p = board->getSquare(start.x, start.y).getPiece();
@@ -216,3 +238,12 @@ bool Move::isNormalKill() {
     return false;
 }
 
+void Move::normalMove() {
+    Square starting = board->getSquare(start.x, start.y);
+    // Square ending = board->getSquare(end.x, end.y);
+    Piece *moving = starting.getPiece();
+    board->getSquare(start.x, start.y).setPiece(nullptr);
+    board->getSquare(end.x, end.y).setPiece(moving);
+}
+
+// Move::~Move() {}

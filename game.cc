@@ -4,6 +4,7 @@
 #include "computer.h"
 #include "square.h"
 #include "move.h"
+#include "normalmove.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -19,7 +20,7 @@ Game::~Game() {
 }
 
 void Game::play() {
-    display->printMsg("Play a normal game:\t game <human/computer[1-4+]> <human/computer[1-4+]> \nStart setup mode:\tsetup\n");
+    display->printMsg("Play a normal game:\tgame <human/computer[1-4+]> <human/computer[1-4+]>\nStart setup mode:\tsetup\n");
     string com;
     string command;
     cin >> command;
@@ -42,6 +43,9 @@ void Game::play() {
     display->printMsg("\nWelcome to Chess!\n");
     display->printHelp();
     display->printBoard(board);
+
+    //TESTINGGGG
+    // cout << "THE STATE:" << board->getState() << endl;
     string line;
     while (getline(cin, line)) {
         istringstream ss{line};
@@ -73,7 +77,6 @@ void Game::setup() {
             cin >> cmd;
             if (cmd == "done") {
                 int retval = board->isValid();
-                cout << "RETVAL" << retval << endl;
                 if (retval == 0) {
                     display->printMsg("Set up complete!\n");
                     display->printBoard(board);
@@ -228,10 +231,11 @@ void Game::move(string startPos, string endPos, string upgrade) {
 
         Move theMove{board, start, end, currPlayer->getColour()};
         string moveType = theMove.getMoveType();
-        if (moveType == "enpassant") {
+        // if (moveType == "enpassant") {
+
             
-        } 
-        else if (moveType == "castle") {
+        // } 
+        // else if (moveType == "castle") {
 
         // }
         /*
@@ -254,12 +258,12 @@ void Game::move(string startPos, string endPos, string upgrade) {
             board = kmove->movePiece();
             delete kmove;
         }
-        else if (moveType == "normalmove") {
-            Move nmove = new normalMove{board, start, end, currPlayer->getColour};
-            board = nmove->movePiece();
-            delete nmove;
-        }*/
-    }
+        */
+        if (moveType == "normalmove") {
+            cout << "in the normal move" << endl;
+            Move theMove{board, start, end, currPlayer->getColour()};
+            theMove.normalMove();
+        }
     display->printBoard(board);
     }
 }

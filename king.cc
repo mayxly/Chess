@@ -20,15 +20,15 @@ std::vector<Position> King::getMoves(Position curpos) {
     Position m1;
     Position castle;
     Position castle1;
-    if (!gethasMoved()) {
-        castle.x = row;
-        castle.y = col+2;
-        castle.x = row;
-        castle.y = col-2;
-        moves.emplace_back(castle);
-        moves.emplace_back(castle1);
-    }
-    if (row -1 >= 0) {
+    // if (!gethasMoved()) {
+    //     castle.x = row;
+    //     castle.y = col+2;
+    //     castle1.x = row;
+    //     castle1.y = col-2;
+    //     moves.emplace_back(castle);
+    //     moves.emplace_back(castle1);
+    // }
+    if (row -1 >= 0) { 
         m1.x = row-1;
         m1.y = col;
         moves.emplace_back(m1);
@@ -74,6 +74,7 @@ std::vector<Position> King::getMoves(Position curpos) {
         m1.y = col - 1;
         moves.emplace_back(m1);
     }
+
     moves = remove(moves);
     return moves;
 }
