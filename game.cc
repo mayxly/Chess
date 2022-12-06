@@ -48,8 +48,10 @@ void Game::play() {
     // cout << "THE POssible:" << board->isMovePossible("white");
     string line;
     while (getline(cin, line)) {
+        cout << "running play game" << endl;
         istringstream ss{line};
         ss >> command;
+        cout << "Command given:  " << command << endl;
         if (command == "help") {
             display->printHelp();
             continue;
@@ -240,10 +242,10 @@ void Game::move(string startPos, string endPos, string upgrade) {
             cout << "INVALID" << endl;
         }
         string moveType = theMove.getMoveType();
-        // if (moveType == "enpassant") {
-
-            
-        // } 
+        if (moveType == "enpassant") {
+            theMove.enpassantMove();
+            turn++;
+        } 
          if (moveType == "castle") {
             if (board->getSquare(start.x, start.y).getPiece()->gethasMoved()) {
                 display->printMsg("Not a valid move. Try again!");
@@ -255,13 +257,13 @@ void Game::move(string startPos, string endPos, string upgrade) {
                 turn++;
         }
         if (moveType == "promotepawn") {
-            display->printMsg("What would you like to promote the pawn to: <rook, knight, bishop, queen>");
-            string promote;
-            cin >> promote;
-                if (promote != "rook" && promote != "knight" && promote != "bishop" && promote != "queen") {
+            //display->printMsg("What would you like to promote the pawn to: <rook, knight, bishop, queen>");
+            //string promote;
+            //cin >> promote;
+                if (upgrade != "rook" && upgrade != "knight" && upgrade != "bishop" && upgrade != "queen") {
                     display->printMsg("Invalid piece, please try again!");
                 } else {
-                    theMove.promoteMove(promote);
+                    theMove.promoteMove(upgrade);
                 }
                 turn++;
         }
