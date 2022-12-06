@@ -25,6 +25,9 @@ public:
     bool isNormalKill();
     bool isKingSafe();
     void normalMove();
+    void killMove();
+    void promoteMove(std::string promoteTo);
+    bool castleMove();
 };
 
 #endif

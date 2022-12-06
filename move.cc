@@ -10,11 +10,12 @@ bool Move::isValid() {
     Piece *pieceToKill = board->getSquare(end.x, end.y).getPiece();
 
     if (start.x == end.x && start.y == end.y) { //start and end are the same
-        return false;
+        return false;//passes
     }
     if (!curPiece) { //start pos piece does not exists
-        return false;
+        return false; //passes
     }
+    //cout << curPiece->getColour() << " =/= " << colour << endl;
     if (curPiece->getColour() != colour) { //start pos piece does not belongs to them
         return false;
     }
@@ -58,22 +59,22 @@ bool Move::isKingSafe() {
     if (isValid()) {
     // cout << "king safe??" << endl;
     
-    Move mockMove{board, start, end, colour};
-    mockMove.normalMove();
-    Piece *killedPiece = board->getSquare(end.x, end.y).getPiece();
+    // Move mockMove{board, start, end, colour};
+    // mockMove.normalMove();
+    // Piece *killedPiece = board->getSquare(end.x, end.y).getPiece();
 
-    for (int i = 0; i < 8; i++) { //look for other opponent pieces
-		for (int j = 0; j < 8; j++) {
-            Piece *p  = board->getSquare(i,j).getPiece();
-            if (p) {
-                cout << "x";
-            } else {
-                cout << "-";
-            }
-        }
-        cout << endl;
-    }
-    cout << endl;
+    // for (int i = 0; i < 8; i++) { //look for other opponent pieces
+	// 	for (int j = 0; j < 8; j++) {
+    //         Piece *p  = board->getSquare(i,j).getPiece();
+    //         if (p) {
+    //             cout << "x";
+    //         } else {
+    //             cout << "-";
+    //         }
+    //     }
+    //     cout << endl;
+    // }
+    // cout << endl;
 
     if (colour == "white" && board->isCheck("white")) {
         safe = false;
@@ -82,13 +83,14 @@ bool Move::isKingSafe() {
         safe = false;
     }
     Move returnMove{board, end, start, colour};
-    board->getSquare(end.x, end.y).setPiece(killedPiece);
+    //board->getSquare(end.x, end.y).setPiece(killedPiece);
     }
     return safe;
 }
 
 bool Move::isValidPath() {
     Piece *p = board->getSquare(start.x, start.y).getPiece();
+    //cout << "Entering Here!!!!!" << endl;
     if (p->getType() == "knight") { //knight can jump over
         return true;
     }
@@ -102,6 +104,7 @@ bool Move::isValidPath() {
         return true;
     }
     else if (start.y < end.y && start.x == end.x) { //path E
+        //cout << "Entering Here!!!!!" << endl;
         for (int i = start.y + 1; i < end.y; i++) {
             Square s = board->getSquare(start.x, i);
             if (s.getPiece()) {
@@ -161,11 +164,22 @@ bool Move::isValidPath() {
 }
 
 string Move::getMoveType() {
-    if (isEnpassant()) return "enpassant";
-    else if (isPromotepawn()) return "promotepawn";
-    else if (isCastle()) return "castle";
-    else if (isNormalKill()) return "normalkill";
-    else return "normalmove";
+    if (isCastle())
+        return "castle";
+    if (isValid()) {
+        if (isEnpassant())
+            return "enpassant";
+        else if (isPromotepawn())
+            return "promotepawn";
+        else if (isCastle())
+            return "castle";
+        else if (isNormalKill())
+            return "normalkill";
+        else
+            return "normalmove";
+    } else {
+        return "Invalid move";
+    }
 }
 
 bool Move::isEnpassant() {
@@ -254,11 +268,97 @@ bool Move::isNormalKill() {
 }
 
 void Move::normalMove() {
+    cout << "entering normal move" << endl;
     Square starting = board->getSquare(start.x, start.y);
     // Square ending = board->getSquare(end.x, end.y);
     Piece *moving = starting.getPiece();
     board->getSquare(start.x, start.y).setPiece(nullptr);
     board->getSquare(end.x, end.y).setPiece(moving);
+    if (moving->getType() == "pawn") {
+        moving->setHasMoved(true);
+    }
+}
+
+void Move::killMove() {
+    cout << "entering killing move" << endl;
+    Square starting = board->getSquare(start.x, start.y);
+    Piece *moving = starting.getPiece()->clone();
+
+    board->getSquare(start.x, start.y).setPiece(nullptr);
+    if (board->getSquare(end.x, end.y).getPiece())
+    {
+        board->getSquare(end.x, end.y).setPiece(nullptr);
+    }
+    board->getSquare(end.x, end.y).setPiece(moving);
+}
+
+void Move::promoteMove(string promoteTo) {
+    cout << "entering promote move" << endl;
+    Piece *promotingTo = nullptr;
+
+    if (promoteTo == "rook")
+    {
+        promotingTo = new Rook{colour};
+    }
+    else if (promoteTo == "knight")
+    {
+        promotingTo = new Knight{colour};
+    }
+    else if (promoteTo == "bishop")
+    {
+        promotingTo = new Bishop{colour};
+    }
+    else if (promoteTo == "queen")
+    {
+        promotingTo = new Queen{colour};
+    }
+
+    board->getSquare(start.x, start.y).setPiece(nullptr);
+    if (board->getSquare(end.x, end.y).getPiece())
+    {
+        board->getSquare(end.x, end.y).setPiece(nullptr);
+    }
+    board->getSquare(end.x, end.y).setPiece(promotingTo);
+    promotingTo->setHasMoved(true);
+}
+
+bool Move::castleMove() {
+    cout << "entering castle move" << endl;
+    Square starting = board->getSquare(start.x, start.y);
+    // Square ending = board->getSquare(end.x, end.y);
+    Piece *moving = starting.getPiece();
+    //cout << moving->getColour() << " =/= " << colour << endl;
+    Piece *castle;
+    board->getSquare(start.x, start.y).setPiece(nullptr);
+    if (start.y + 2 == end.y) { //king side castle
+        if (moving->getColour() == "white") {
+            castle = board->getSquare(7,7).getPiece();
+            board->getSquare(7, 7).setPiece(nullptr);
+            board->getSquare(7, 5).setPiece(castle);
+        } else {
+            castle = board->getSquare(0,7).getPiece();
+            board->getSquare(0, 7).setPiece(nullptr);
+            board->getSquare(0, 5).setPiece(castle);
+        }
+    } else {
+        if (moving->getColour() == "white") {
+            //cout << "right one" << endl;
+            castle = board->getSquare(7,0).getPiece();
+            board->getSquare(7, 0).setPiece(nullptr);
+            board->getSquare(7, 3).setPiece(castle);
+        } else {
+            castle = board->getSquare(0,0).getPiece();
+            board->getSquare(0, 0).setPiece(nullptr);
+            board->getSquare(0, 3).setPiece(castle);
+        }
+    }
+    if (castle->gethasMoved())
+    {
+        return false;
+    }
+    board->getSquare(end.x, end.y).setPiece(moving);
+    moving->setHasMoved(true);
+    return true;
 }
 
 // Move::~Move() {}
