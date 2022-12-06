@@ -43,7 +43,16 @@ void Game::play() {
     display->printMsg("\nWelcome to Chess!\n");
     display->printHelp();
     display->printBoard(board);
-
+    Player *currPlayer;
+    if ((turn % 2) != 0) {
+            currPlayer = player1;
+        } else {
+            currPlayer = player2;
+        }
+    string name = currPlayer->getName();
+    string colour = currPlayer->getColour();
+    string msg = "It's " + name + "'s turn! (" + colour + ")";
+    display->printMsg(msg);
     //TESTINGGGG
     // cout << "THE POssible:" << board->isMovePossible("white");
     string line;
@@ -60,7 +69,19 @@ void Game::play() {
             string startPos, endPos, upgrade;
             ss >> startPos >> endPos >> upgrade;
             move(startPos, endPos, upgrade);
+            if (turn == 0) {
+                display->printMsg("Thanks for playing!");
+                return;
+            }
             continue;
+        }
+        else if (command == "resign") {
+            if (turn % 2 != 0) {
+                display->printMsg("White resigns! Thanks for playing!");
+            } else {
+                display->printMsg("Black resigns! Thanks for playing!");
+            }
+            return;
         }
     }
 }
@@ -77,7 +98,7 @@ void Game::setup() {
     while (1) {
             cin >> cmd;
             if (cmd == "done") {
-                cout << "STATE " << board->getState() << endl;
+                // cout << "STATE " << board->getState() << endl;
                 int retval = board->isValid();
                 if (retval == 0) {
                     display->printMsg("Set up complete!\n");
@@ -212,14 +233,11 @@ void Game::removePiece(string square) {
 
 void Game::move(string startPos, string endPos, string upgrade) {
     Player *currPlayer;
-    cout << "Turn count: " << turn << endl;
+    // cout << "Turn count: " << turn << endl;
     if ((turn % 2) != 0) {
         currPlayer = player1;
-        display->printMsg("It's player 1's turn!");
     } else {
-        cout << "player2 is playing" << endl;
         currPlayer = player2;
-        display->printMsg("It's player 2's turn!");
     }
 
     //human move
@@ -234,12 +252,11 @@ void Game::move(string startPos, string endPos, string upgrade) {
 
         Position start{startx, starty};
         Position end{endx, endy};
-        cout << currPlayer->getColour() << endl;
         Move theMove{board, start, end, currPlayer->getColour()};
-        if (theMove.isValid()) {
-            cout << "VALID" << endl;
+        if (theMove.isKingSafe()) {
+            // cout << "VALID" << endl;
         } else {
-            cout << "INVALID" << endl;
+            // cout << "INVALID" << endl;
         }
         string moveType = theMove.getMoveType();
         if (moveType == "enpassant") {
@@ -254,7 +271,6 @@ void Game::move(string startPos, string endPos, string upgrade) {
                 if (!rookMove) {
                     display->printMsg("Not a valid move. Try again!");
                 }
-                turn++;
         }
         if (moveType == "promotepawn") {
             //display->printMsg("What would you like to promote the pawn to: <rook, knight, bishop, queen>");
@@ -265,13 +281,11 @@ void Game::move(string startPos, string endPos, string upgrade) {
                 } else {
                     theMove.promoteMove(upgrade);
                 }
-                turn++;
         }
         else if (moveType == "normalkill") {
             theMove.killMove();
-            turn++;
         } else if (moveType == "normalmove") {
-            cout << "in the normal move" << endl;
+            // cout << "in the normal move" << endl;
             if (board->getSquare(start.x, start.y).getPiece()->getType() == "pawn") {
                 int wdistance = start.x - end.x;
                 int bdistance = end.x - start.x;
@@ -283,11 +297,41 @@ void Game::move(string startPos, string endPos, string upgrade) {
             } else {
                 theMove.normalMove();
             }
-            turn++;
         } else if (moveType == "Invalid move") {
             display->printMsg("Invalid Move, try again!");
         }
-    display->printBoard(board);
+        if (moveType != "Invalid move") {
+            display->printBoard(board);
+            string state = board->getState();
+            if (state != "normal") {
+                if (state == "stalemate") {
+                    display->printMsg("Stalemate!");
+                    turn = 0;
+                } else if (state == "whitecheckmate") {
+                    display->printMsg("Checkmate! White wins!");
+                    turn = 0;
+                } else if (state == "blackcheckmate") {
+                    display->printMsg("Checkmate! Black wins!");
+                    turn = 0;
+                } else if (state == "whitecheck") {
+                    display->printMsg("White is in check.");
+                } else if (state == "blackcheck") {
+                    display->printMsg("Black is in check.");
+                }
+            }
+            if ( turn != 0) {
+                turn++;
+                if ((turn % 2) != 0) {
+                    currPlayer = player1;
+                } else {
+                    currPlayer = player2;
+                }
+                string name = currPlayer->getName();
+                string colour = currPlayer->getColour();
+                string msg = "It's " + name + "'s turn! (" + colour + ")";
+                display->printMsg(msg);
+            }
+        }
     }
 }
 

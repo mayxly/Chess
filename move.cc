@@ -64,16 +64,23 @@ bool Move::isValid() {
 
 bool Move::isKingSafe() {
     bool safe = true;
-    if (isValid()) {
-    // cout << "king safe??" << endl;
-    
-    // Move mockMove{board, start, end, colour};
-    // mockMove.normalMove();
-    // Piece *killedPiece = board->getSquare(end.x, end.y).getPiece();
+    if (isValid()) { 
+    // Board *cloneBoard = new Board{"setup"};
+    Board cloneBoard = *board;
 
+    Square *startSquare = cloneBoard.getSquarePoint(start.x, start.y); //CLONED BOARD
+    Square *endSquare = cloneBoard.getSquarePoint(end.x, end.y);
+    Piece *movingPiece = startSquare->getPiece();
+
+    if (endSquare->getPiece()) {
+        endSquare->setPiece(nullptr);
+    }
+    endSquare->setPiece(movingPiece);
+    startSquare->setPiece(nullptr);
+    // cout << "CLONED BOARD:" << endl;
     // for (int i = 0; i < 8; i++) { //look for other opponent pieces
 	// 	for (int j = 0; j < 8; j++) {
-    //         Piece *p  = board->getSquare(i,j).getPiece();
+    //         Piece *p  = cloneBoard.getSquare(i,j).getPiece();
     //         if (p) {
     //             cout << "x";
     //         } else {
@@ -84,14 +91,15 @@ bool Move::isKingSafe() {
     // }
     // cout << endl;
 
-    if (colour == "white" && board->isCheck("white")) {
-        safe = false;
-    }
-    else if (colour == "black" && board->isCheck("black")) {
-        safe = false;
-    }
-    Move returnMove{board, end, start, colour};
-    //board->getSquare(end.x, end.y).setPiece(killedPiece);
+        if (colour == "white" && cloneBoard.isCheck("white")) {
+            // cout << "KING UNSAFE" << endl;
+            safe = false;
+        }
+        else if (colour == "black" && cloneBoard.isCheck("black")) {
+            // cout << "KING UNSAFE" << endl;
+            safe = false;
+        }
+    
     }
     return safe;
 }
@@ -283,7 +291,7 @@ bool Move::isNormalKill() {
 }
 
 void Move::normalMove() {
-    cout << "entering normal move" << endl;
+    // cout << "entering normal move" << endl;
     Square starting = board->getSquare(start.x, start.y);
     // Square ending = board->getSquare(end.x, end.y);
     Piece *moving = starting.getPiece();
@@ -296,7 +304,7 @@ void Move::normalMove() {
 }
 
 void Move::killMove() {
-    cout << "entering killing move" << endl;
+    //cout << "entering killing move" << endl;
     Square starting = board->getSquare(start.x, start.y);
     Piece *moving = starting.getPiece()->clone();
 
@@ -309,7 +317,7 @@ void Move::killMove() {
 }
 
 void Move::promoteMove(string promoteTo) {
-    cout << "entering promote move" << endl;
+    //cout << "entering promote move" << endl;
     Piece *promotingTo = nullptr;
 
     if (promoteTo == "rook")
@@ -339,8 +347,7 @@ void Move::promoteMove(string promoteTo) {
 }
 
 bool Move::castleMove() {
-    cout << "entering castle move" << endl;
-
+    //cout << "entering castle move" << endl;
     Square starting = board->getSquare(start.x, start.y);
     // Square ending = board->getSquare(end.x, end.y);
     Piece *moving = starting.getPiece();

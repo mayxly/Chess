@@ -21,13 +21,17 @@ public:
 
 public:
  Board(std::string type);
+ Board(const Board &other);
+ Board &operator=(const Board &other);
  ~Board();
  Square& getSquare(int x, int y);
+ Square* getSquarePoint(int x, int y);
  int isValid();
  Position getRecentPawnPos();
  void setRecentPawnPos(Position p);
  bool isCheck(std::string colour);
  bool isCheckmate(std::string colour);
+ bool isStalemate(std::string colour);
  bool isMovePossible(std::string colour);
  std::vector<std::pair<Position, Position>> getMovesPossible(std::string colour);
  std::string getState();

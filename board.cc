@@ -77,6 +77,38 @@ Board::Board(string type)
     recentPawnPos = p;
 }
 
+Board::Board(const Board &other) {
+    // cout << "board copy called" << endl;
+    recentPawnPos = other.recentPawnPos;
+    vector<vector<Square*>> newBoard;
+    for (int i = 0; i < 8; i++) {
+		vector<Square*> row;
+		for (int j = 0; j < 8; j++) {
+			Square *s{other.board[i][j] ? new Square{*other.board[i][j]} : nullptr};
+			row.push_back(s);
+		}
+		newBoard.push_back(row);
+	}
+    board = newBoard;
+}
+ 
+Board &Board::operator=(const Board &other) {
+    // cout << "board operator called" << endl;
+    if (this == &other) return *this;
+    recentPawnPos = other.recentPawnPos;
+    vector<vector<Square*>> newBoard;
+    for (int i = 0; i < 8; i++) {
+		vector<Square*> row;
+		for (int j = 0; j < 8; j++) {
+			Square *s{other.board[i][j] ? new Square{*other.board[i][j]} : nullptr};
+			row.push_back(s);
+		}
+		newBoard.push_back(row);
+	}
+    board = newBoard;
+    return *this;
+}
+
 Board::~Board() {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -88,6 +120,10 @@ Board::~Board() {
 
 Square& Board::getSquare(int x, int y) {
     return *board[x][y];
+}
+
+Square* Board::getSquarePoint(int x, int y) {
+    return board[x][y];
 }
 
 int Board::isValid() {
@@ -109,7 +145,7 @@ int Board::isValid() {
             }
         }
     }
-    if (wKingCount > 1 || bKingCount > 1) {
+    if (wKingCount > 1 || bKingCount > 1) {//ONE WHITE KING ONE BLACK ONLY
         return 1;
     }
 
@@ -171,7 +207,7 @@ bool Board::isCheck(std::string colour) {
             if (p && p->getColour() != colour) {
                 Board *b = this;
                 Move curMove{b, Position{i, j}, kingPos, p->getColour()};
-                if (curMove.isValid() && curMove.isKingSafe()) {
+                if (curMove.isValid()) {
                      return true;
                 }
             }
@@ -197,13 +233,21 @@ bool Board::isCheckmate(std::string colour) {
     return false;
 }
 
+bool Board::isStalemate(std::string colour) {
+    if (!isMovePossible(colour) && !isCheck(colour)) {
+        return true;
+    }
+    return false;
+}
+
+
 bool Board::isMovePossible(std::string colour) {
     vector <Position> movesPossible;
     for (int i = 0; i < 8; i++) { //check each piece for possible moves to move/kill
 		for (int j = 0; j < 8; j++) {
             Piece *p = this->getSquare(i, j).getPiece();
             if (p && p->getColour() == colour) {
-                cout << "is move possible for " << colour << p->getType() << endl;
+                // cout << "is move possible for " << colour << p->getType() << endl;
                 movesPossible =  p->getMoves(Position{i, j});
                 // if (p->getType() == "pawn") {   //pawn has different capture moves
                 //     Pawn *pawn = dynamic_cast<Pawn *>(p);
@@ -211,15 +255,12 @@ bool Board::isMovePossible(std::string colour) {
                 //     movesPossible.insert(movesPossible.end(), killsPossible.begin(), killsPossible.end());
                 // }
                 int len = movesPossible.size();
-                //cout << "LENGTH EACH PIECE " << len << endl;
                 for (int x = 0; x < len; x++) {
                     Board *b = this;
                     Move curMove{b, Position{i, j}, movesPossible[x], p->getColour()};
                     if (curMove.isKingSafe()) {
-                        //cout << "true baby" << endl;
+                        // cout << p->getColour() << p->getType() << "is safe and possible" << endl;
                         return true;
-                    } else {
-                        //cout << "boo" << endl;
                     }
                 }
             }
@@ -265,10 +306,10 @@ vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
 }
 
 string Board::getState() {
-    if (!this->isMovePossible("white") && !this->isMovePossible("black")) {
+    if (this->isStalemate("white") || this->isStalemate("black")) {
         return "stalemate";
     }
-    else if (this->isCheckmate("white")) {
+    if (this->isCheckmate("white")) {
         return "whitecheckmate";
     }
     else if (this->isCheckmate("black")) {

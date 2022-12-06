@@ -9,7 +9,8 @@ private:
  
 public:
  Square(int x, int y, Piece *piece = nullptr);
-//  Square(Square &other);
+ Square(Square &other);
+ Square &operator=(const Square &other);
 //  ~Square();
  void setPiece(Piece *piece);
  Piece* getPiece();
