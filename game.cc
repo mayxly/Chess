@@ -233,16 +233,32 @@ void Game::move(string startPos, string endPos, string upgrade) {
         } 
         else if (moveType == "castle") {
 
-        }
+        // }
+        /*
         else if (moveType == "promotepawn") {
-
+            display->printMsg("What would you like to promote the pawn to: <rook, knight, bishop, queen>");
+            string promote;
+            while(cin >> promote) {
+                if (promote != "rook" || promote != "knight" || promote != "bishop" || promote != "queen") {
+                    display->printMsg("Invalid piece, please try again!");
+                } else {
+                    break;
+                }
+            }
+            Move pmove = new promoteMove{board, start, end, currPlayer->getColour()};
+            board = pmove->movePiece();
+            delete pmove;
         }
         else if (moveType == "normalkill") {
-
+            Move kmove = new killMove{board, start, end, currPlayer->getColour()};
+            board = kmove->movePiece();
+            delete kmove;
         }
         else if (moveType == "normalmove") {
-
-        }
+            Move nmove = new normalMove{board, start, end, currPlayer->getColour};
+            board = nmove->movePiece();
+            delete nmove;
+        }*/
     }
     display->printBoard(board);
 }

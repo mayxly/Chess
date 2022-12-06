@@ -216,4 +216,3 @@ bool Move::isNormalKill() {
     return false;
 }
 
-

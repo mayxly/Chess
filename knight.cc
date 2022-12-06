@@ -3,6 +3,16 @@ using namespace std;
 
 Knight::Knight(std::string colour) : Piece{colour, "knight"} {}
 
+Piece* Knight::clone()
+{
+    Piece *newB = new Knight{getColour()};
+    if (gethasMoved())
+    {
+        newB->sethasMoved();
+    }
+    return newB;
+}
+
 std::vector<Position> Knight::getMoves(Position curpos) {
     vector<Position> moves;
     int row = curpos.x;

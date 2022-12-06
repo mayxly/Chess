@@ -3,6 +3,15 @@ using namespace std;
 
 Rook::Rook(std::string colour) : Piece{colour, "rook"} {}
 
+Piece* Rook::clone() {
+    Piece *newB = new Rook{getColour()};
+    if (gethasMoved())
+    {
+        newB->sethasMoved();
+    }
+    return newB;
+}
+
 std::vector<Position> Rook::getMoves(Position curpos) {
     vector<Position> moves;
     int row = curpos.x;

@@ -16,6 +16,7 @@ protected:
 
 public:
     Move(Board* b, Position start, Position end, std::string colour);
+    //virtual Board movePiece(std::string promoteTo = 0); 
     bool isValid();
     bool isValidPath();
     std::string getMoveType();
