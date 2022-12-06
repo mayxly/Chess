@@ -185,7 +185,7 @@ bool Board::isCheckmate(std::string colour) {
 
 bool Board::isMovePossible(std::string colour) {
     vector <Position> movesPossible;
-    for (int i = 0; i < 8; i++) { //check each piece for possible moves
+    for (int i = 0; i < 8; i++) { //check each piece for possible moves to move/kill
 		for (int j = 0; j < 8; j++) {
             Piece *p = this->getSquare(i, j).getPiece();
             if (p && p->getColour() == colour) {
