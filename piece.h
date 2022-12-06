@@ -29,7 +29,7 @@ public:
  std::string getColour();
  std::string getType();
  bool gethasMoved();
- void sethasMoved();
+ void setHasMoved(bool state);
  virtual ~Piece();
 };
 

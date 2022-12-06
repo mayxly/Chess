@@ -20,11 +20,11 @@ public:
     bool isValid();
     bool isValidPath();
     std::string getMoveType();
-    bool isCastle();
     bool isEnpassant();
-    bool isNormalKill();
     bool isPromotepawn();
-    //~Move();
+    bool isCastle();
+    bool isNormalKill();
+    bool isKingSafe();
 };
 
 #endif

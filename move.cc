@@ -45,6 +45,10 @@ bool Move::isValid() {
     }
 }
 
+bool Move::isKingSafe() {
+    return true;
+}
+
 
 bool Move::isValidPath() {
     Piece *p = board->getSquare(start.x, start.y).getPiece();
@@ -120,7 +124,57 @@ bool Move::isValidPath() {
 }
 
 string Move::getMoveType() {
-    return "normalMove";
+    if (isEnpassant()) return "enpassant";
+    else if (isPromotepawn()) return "promotepawn";
+    else if (isCastle()) return "castle";
+    else if (isNormalKill()) return "normalkill";
+    else return "normalmove";
+}
+
+bool Move::isEnpassant() {
+    Position pawnPos = board->getRecentPawnPos();
+    if (pawnPos.x == -1 && pawnPos.y == -1) { //pawn did not move on prev turn
+        return false;
+    }
+    Piece *curPiece = board->getSquare(start.x, start.y).getPiece();
+    if (curPiece->getType() != "pawn") { //curPiece not a pawn
+        return false;
+    }
+    Square endSquare = board->getSquare(end.x, end.y);
+    if (endSquare.getPiece() != nullptr) { //end square occupied
+        return false;
+    }
+    Piece *pawnToKill; 
+    if (colour == "white") {
+        pawnToKill = board->getSquare(end.x+1, end.y).getPiece(); 
+        if (!(pawnPos.x == end.x+1 && pawnPos.y == end.y)) { //not killing the correct pawn that just moved
+            return false;
+        }
+    } else {
+        pawnToKill = board->getSquare(end.x-1, end.y).getPiece();
+        if (!(pawnPos.x == end.x-1 && pawnPos.y == end.y)) { //not killing the correct pawn that just moved
+            return false;
+        }
+    }
+    if (pawnToKill && pawnToKill->getType() == "pawn") {
+        return true;
+    }
+    return false;
+}
+
+
+
+bool Move::isPromotepawn() {
+    Piece *curPiece = board->getSquare(start.x, start.y).getPiece();
+    if (curPiece && curPiece->getType() == "pawn") {
+        if (curPiece->getColour() == "white" && end.x == 0) {
+            return true;
+        }
+        else if (curPiece->getColour() == "black" && end.x == 7) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool Move::isCastle() { //king moves two squares towards rook
@@ -154,14 +208,6 @@ bool Move::isCastle() { //king moves two squares towards rook
     return false;
 }
 
-bool Move::isEnpassant() {
-    return true;
-}
-
-bool Move::isPromotepawn() {
-    return true;
-}
-
 bool Move::isNormalKill() {
     Piece *pieceToKill = board->getSquare(end.x, end.y).getPiece();
     if (pieceToKill && pieceToKill->getColour() != colour) {
@@ -169,6 +215,4 @@ bool Move::isNormalKill() {
     }
     return false;
 }
-
-//Move::~Move() {}
 

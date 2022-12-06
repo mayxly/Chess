@@ -72,12 +72,20 @@ void Game::setup() {
     while (1) {
             cin >> cmd;
             if (cmd == "done") {
-                if (board->isValid()) {
+                int retval = board->isValid();
+                cout << "RETVAL" << retval << endl;
+                if (retval == 0) {
                     display->printMsg("Set up complete!\n");
                     display->printBoard(board);
                     break;
                 } else {
-                    display->printMsg("Invalid board. Please configure again.\n");
+                    if (retval == 1) {
+                        display->printMsg("Invalid board: More than one king. Please configure again.\n");
+                    } else if (retval == 2) {
+                        display->printMsg("Invalid board: Pawn on first or last row. Please configure again.\n");
+                    } else {
+                        display->printMsg("Invalid board: King is in check. Please configure again.\n");
+                    }
                     display->printBoard(board);
                     continue;
                 }
@@ -220,10 +228,10 @@ void Game::move(string startPos, string endPos, string upgrade) {
 
         Move theMove{board, start, end, currPlayer->getColour()};
         string moveType = theMove.getMoveType();
-        // if (moveType == "enpassant") {
-
-        // } 
-        // else if (moveType == "castle") {
+        if (moveType == "enpassant") {
+            
+        } 
+        else if (moveType == "castle") {
 
         // }
         /*

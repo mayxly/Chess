@@ -27,8 +27,8 @@ bool Piece::gethasMoved() {
     return hasMoved;
 }
 
-void Piece::sethasMoved() {
-    hasMoved = false;
+void Piece::setHasMoved(bool state) {
+    hasMoved = state;
 }
 
 Piece::~Piece() {}
