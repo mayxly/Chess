@@ -249,11 +249,11 @@ bool Board::isMovePossible(std::string colour) {
             if (p && p->getColour() == colour) {
                 // cout << "is move possible for " << colour << p->getType() << endl;
                 movesPossible =  p->getMoves(Position{i, j});
-                // if (p->getType() == "pawn") {   //pawn has different capture moves
-                //     Pawn *pawn = dynamic_cast<Pawn *>(p);
-                //     vector <Position> killsPossible = pawn->getCaptureMoves(Position{i, j});
-                //     movesPossible.insert(movesPossible.end(), killsPossible.begin(), killsPossible.end());
-                // }
+                if (p->getType() == "pawn") {   //pawn has different capture moves
+                    Pawn *pawn = dynamic_cast<Pawn *>(p);
+                    vector <Position> killsPossible = pawn->getCaptureMoves(Position{i, j});
+                    movesPossible.insert(movesPossible.end(), killsPossible.begin(), killsPossible.end());
+                }
                 int len = movesPossible.size();
                 for (int x = 0; x < len; x++) {
                     Board *b = this;
@@ -270,6 +270,7 @@ bool Board::isMovePossible(std::string colour) {
 }
 
 vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
+    cout << "entered" << endl;
     vector <pair<Position, Position>> retval;
     vector <Position> movesPossible;
     for (int i = 0; i < 8; i++) { //check each piece for possible moves to move/kill
@@ -300,8 +301,11 @@ vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
         }
     }
 
-    //random_shuffle(retval.begin(), retval.end());
-    //random_shuffle(retval.begin(), retval.end());
+    random_shuffle(retval.begin(), retval.end());
+    random_shuffle(retval.begin(), retval.end());
+    for (auto movepair: retval) {
+        cout << movepair.first.x << movepair.first.y << " to " << movepair.second.x << movepair.second.y << endl;
+    }
     return retval;
 }
 
