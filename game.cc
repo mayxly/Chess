@@ -20,7 +20,7 @@ Game::~Game() {
 }
 
 void Game::play() {
-    display->printMsg("Play a normal game:\tgame <human/computer[1-4+]> <human/computer[1-4+]>\nStart setup mode:\tsetup\n");
+    display->printMsg("Play a normal game:\tgame <human/computer[1-4+]> <human/computer[1-4+]>\nStart ()) mode:\tsetup\n");
     string com;
     string command;
     cin >> command;
@@ -45,7 +45,7 @@ void Game::play() {
     display->printBoard(board);
 
     //TESTINGGGG
-    // cout << "THE STATE:" << board->getState() << endl;
+    // cout << "THE POssible:" << board->isMovePossible("white");
     string line;
     while (getline(cin, line)) {
         istringstream ss{line};
@@ -76,6 +76,7 @@ void Game::setup() {
     while (1) {
             cin >> cmd;
             if (cmd == "done") {
+                cout << "STATE " << board->getState() << endl;
                 int retval = board->isValid();
                 if (retval == 0) {
                     display->printMsg("Set up complete!\n");
@@ -212,8 +213,10 @@ void Game::move(string startPos, string endPos, string upgrade) {
     Player *currPlayer;
     if ((turn % 2) != 0) {
         currPlayer = player1;
+        display->printMsg("It's player 1's turn!");
     } else {
         currPlayer = player2;
+        display->printMsg("It's player 2's turn!");
     }
 
     //human move
@@ -230,6 +233,11 @@ void Game::move(string startPos, string endPos, string upgrade) {
         Position end{endx, endy};
 
         Move theMove{board, start, end, currPlayer->getColour()};
+        if (theMove.isValid()) {
+            cout << "VALID" << endl;
+        } else {
+            cout << "INVALID" << endl;
+        }
         string moveType = theMove.getMoveType();
         // if (moveType == "enpassant") {
 
