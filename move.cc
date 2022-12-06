@@ -18,15 +18,15 @@ bool Move::isValid() {
     if (curPiece->getColour() != colour) { //start pos piece does not belongs to them
         return false;
     }
-    if (isValidPath() && isKingSafe()) {
-        cout << "MADE IT" << endl;
+    if (isValidPath()) {
+        // cout << "MADE IT" << endl;
         vector <Position> validMoves = curPiece->getMoves(start);
         int len = validMoves.size();
         if (!pieceToKill) {    //no piece to kill, just move to square
-        cout << "MADE IT2" << endl;
+        // cout << "MADE IT2" << endl;
             for (int i = 0; i < len; i++) {
                 if (validMoves[i].x == end.x && validMoves[i].y == end.y) {
-                    cout << "SECOND TIME" << validMoves[i].x << validMoves[i].y << endl;
+                    // cout << "SECOND TIME" << validMoves[i].x << validMoves[i].y << endl;
                     return true;
                 }
             }
@@ -54,21 +54,36 @@ bool Move::isValid() {
 }
 
 bool Move::isKingSafe() {
-    Square startSquare = board->getSquare(start.x, start.y);
-    Square endSquare = board->getSquare(end.x, end.y);
     bool safe = true;
-    Piece *tempPieceStart = startSquare.getPiece();
-    Piece *tempPieceEnd = endSquare.getPiece();
-    startSquare.setPiece(nullptr);
-    endSquare.setPiece(tempPieceStart);
+    if (isValid()) {
+    // cout << "king safe??" << endl;
+    
+    Move mockMove{board, start, end, colour};
+    mockMove.normalMove();
+    Piece *killedPiece = board->getSquare(end.x, end.y).getPiece();
+
+    for (int i = 0; i < 8; i++) { //look for other opponent pieces
+		for (int j = 0; j < 8; j++) {
+            Piece *p  = board->getSquare(i,j).getPiece();
+            if (p) {
+                cout << "x";
+            } else {
+                cout << "-";
+            }
+        }
+        cout << endl;
+    }
+    cout << endl;
+
     if (colour == "white" && board->isCheck("white")) {
         safe = false;
     }
     else if (colour == "black" && board->isCheck("black")) {
         safe = false;
     }
-    startSquare.setPiece(tempPieceStart);
-    endSquare.setPiece(tempPieceEnd);
+    Move returnMove{board, end, start, colour};
+    board->getSquare(end.x, end.y).setPiece(killedPiece);
+    }
     return safe;
 }
 

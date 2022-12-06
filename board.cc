@@ -1,6 +1,8 @@
 #include "board.h"
 #include "move.h"
+#include <algorithm>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 Board::Board(string type)
@@ -169,7 +171,7 @@ bool Board::isCheck(std::string colour) {
             if (p && p->getColour() != colour) {
                 Board *b = this;
                 Move curMove{b, Position{i, j}, kingPos, p->getColour()};
-                if (curMove.isValid()) {
+                if (curMove.isValid() && curMove.isKingSafe()) {
                      return true;
                 }
             }
@@ -201,6 +203,7 @@ bool Board::isMovePossible(std::string colour) {
 		for (int j = 0; j < 8; j++) {
             Piece *p = this->getSquare(i, j).getPiece();
             if (p && p->getColour() == colour) {
+                cout << "is move possible for " << colour << p->getType() << endl;
                 movesPossible =  p->getMoves(Position{i, j});
                 // if (p->getType() == "pawn") {   //pawn has different capture moves
                 //     Pawn *pawn = dynamic_cast<Pawn *>(p);
@@ -208,11 +211,15 @@ bool Board::isMovePossible(std::string colour) {
                 //     movesPossible.insert(movesPossible.end(), killsPossible.begin(), killsPossible.end());
                 // }
                 int len = movesPossible.size();
-                for (int i = 0; i < len; i++) {
+                cout << "LENGTH EACH PIECE " << len << endl;
+                for (int x = 0; x < len; x++) {
                     Board *b = this;
-                    Move curMove{b, Position{i, j}, movesPossible[i], p->getColour()};
-                    if (curMove.isValid()) {
+                    Move curMove{b, Position{i, j}, movesPossible[x], p->getColour()};
+                    if (curMove.isKingSafe()) {
+                        cout << "true baby" << endl;
                         return true;
+                    } else {
+                        cout << "boo" << endl;
                     }
                 }
             }
@@ -221,12 +228,44 @@ bool Board::isMovePossible(std::string colour) {
     return false;
 }
 
-// vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
-//     for ()
-// }
+vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
+    vector <pair<Position, Position>> retval;
+    vector <Position> movesPossible;
+    for (int i = 0; i < 8; i++) { //check each piece for possible moves to move/kill
+		for (int j = 0; j < 8; j++) {
+            Piece *p = this->getSquare(i, j).getPiece();
+            if (p && p->getColour() == colour) {
+
+                // cout << "is move possible for " << colour << p->getType() << endl;
+                movesPossible =  p->getMoves(Position{i, j});
+
+                if (p->getType() == "pawn") {   //pawn has different capture moves
+                    Pawn *pawn = dynamic_cast<Pawn *>(p);
+                    vector <Position> killsPossible = pawn->getCaptureMoves(Position{i, j});
+                    movesPossible.insert(movesPossible.end(), killsPossible.begin(), killsPossible.end());
+                }
+
+                int len = movesPossible.size();
+                for (int x = 0; x < len; x++) {
+                    Board *b = this;
+                    Move curMove{b, Position{i, j}, movesPossible[x], p->getColour()};
+                    if (curMove.isKingSafe()) {
+                        Position start{i, j};
+                        Position end = movesPossible[x];
+                        retval.push_back(make_pair(start, end));
+                    }
+                }
+            }
+        }
+    }
+
+    random_shuffle(retval.begin(), retval.end());
+    random_shuffle(retval.begin(), retval.end());
+    return retval;
+}
 
 string Board::getState() {
-    if (!isMovePossible("white") && !isMovePossible("black")) {
+    if (!this->isMovePossible("white") && !this->isMovePossible("black")) {
         return "stalemate";
     }
     else if (this->isCheckmate("white")) {

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <utility>
 
 #include "square.h"
 #include "piece.h"
@@ -28,7 +29,7 @@ public:
  bool isCheck(std::string colour);
  bool isCheckmate(std::string colour);
  bool isMovePossible(std::string colour);
-//  vector <pair<Position, Position>> getMovesPossible(std::string colour);
+ std::vector<std::pair<Position, Position>> getMovesPossible(std::string colour);
  std::string getState();
 };
 

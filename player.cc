@@ -7,4 +7,8 @@ string Player::getColour() {
     return colour;
 }
 
+string Player::getName() {
+    return name;
+}
+
 Player::~Player() {}
