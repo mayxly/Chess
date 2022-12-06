@@ -13,10 +13,6 @@
 #include "knight.h"
 #include "pawn.h"
 
-enum class State {
-    Normal, WhiteCheck, BlackCheck, WhiteCheckmate, BlackCheckmate, Stalemate
-};
-
 class Board {
 public:
  std::vector<std::vector<Square*>> board; // make the board of all 64 squares
@@ -33,7 +29,7 @@ public:
  bool isCheckmate(std::string colour);
  bool isMovePossible(std::string colour);
 //  vector <pair<Position, Position>> getMovesPossible(std::string colour);
- State getState();
+ std::string getState();
 };
 
 #endif

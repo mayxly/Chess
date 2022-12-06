@@ -14,9 +14,9 @@ string Piece::getType() {
 vector<Position> Piece::remove(vector <Position> n) {
     vector <Position> checkedMoves;
     for (auto move: n) {
-        int row = move.y;
-        int col = move.x;
-        if (row <= 7 && row >= 0 && col <= 7 && col <= 0) {
+        int row = move.x;
+        int col = move.y;
+        if (row <= 7 && row >= 0 && col <= 7 && col >= 0) {
             checkedMoves.emplace_back(move);
         }
     }

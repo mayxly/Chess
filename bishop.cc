@@ -1,4 +1,5 @@
 #include "bishop.h"
+#include <iostream>
 using namespace std;
 
 Bishop::Bishop(std::string colour) : Piece{colour, "bishop"} {}
@@ -16,7 +17,7 @@ std::vector<Position> Bishop::getMoves(Position curpos) {
     int row = curpos.x;
     int col = curpos.y;
     Position m1, m2, m3, m4;
-    for (int i =0; i < 8; i++) {
+    for (int i = 1; i <= 8; i++) {
         m1.x = row + i;
         m1.y = col + i;
         m2.x = row - i;
@@ -31,6 +32,9 @@ std::vector<Position> Bishop::getMoves(Position curpos) {
         moves.emplace_back(m4);
     }
     moves = remove(moves);
+    // for ( auto i : moves) {
+    //     cout << "possible move: " << i.x << i.y << endl;
+    // }
     return moves;
 }
 

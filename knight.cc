@@ -1,4 +1,5 @@
 #include "knight.h"
+#include <iostream>
 using namespace std;
 
 Knight::Knight(std::string colour) : Piece{colour, "knight"} {}
@@ -43,6 +44,9 @@ std::vector<Position> Knight::getMoves(Position curpos) {
     m8.y = col + 1;
     moves.emplace_back(m8);
     moves = remove(moves);
+    // for ( auto i : moves) {
+    //     cout << "possible move: " << i.x << i.y << endl;
+    // }
     return moves;
 }
 

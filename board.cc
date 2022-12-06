@@ -89,6 +89,7 @@ Square& Board::getSquare(int x, int y) {
 }
 
 int Board::isValid() {
+    // cout << "THE STATE!" << getState() << endl;
     //one white king
     //one black king
     int wKingCount = 0;
@@ -126,7 +127,7 @@ int Board::isValid() {
             }
         }
     }
-    //neither king is in check
+    // neither king is in check
     if (isCheck("black") || isCheck("white")) {
         return 3;
     }
@@ -143,18 +144,28 @@ void Board::setRecentPawnPos(Position p) {
 
 bool Board::isCheck(std::string colour) {
     Position kingPos{0, 0};
+    bool kingFound = false;
     for (int i = 0; i < 8; i++) { //look for your king
 		for (int j = 0; j < 8; j++) {
             Piece *p  = board[i][j]->getPiece();
             if (p && p->getType() == "king" && p->getColour() == colour) {
                 kingPos.x = i;
                 kingPos.y = j;
+                kingFound = true;
             }
         }
     }
+    if (!kingFound) {
+        // cout << "no king found " << colour << endl;
+        return false;
+    }
+    // cout << kingPos.x << kingPos.y << endl;
     for (int i = 0; i < 8; i++) { //look for other opponent pieces
 		for (int j = 0; j < 8; j++) {
             Piece *p  = board[i][j]->getPiece();
+            if (p) {
+                // cout << "piece found at " << i << j << endl;
+            }
             if (p && p->getColour() != colour) {
                 Board *b = this;
                 Move curMove{b, Position{i, j}, kingPos, p->getColour()};
@@ -164,6 +175,7 @@ bool Board::isCheck(std::string colour) {
             }
         }
     }
+    // cout << "not a check " << colour;t
     return false;
 }
 
@@ -190,11 +202,11 @@ bool Board::isMovePossible(std::string colour) {
             Piece *p = this->getSquare(i, j).getPiece();
             if (p && p->getColour() == colour) {
                 movesPossible =  p->getMoves(Position{i, j});
-                if (p->getType() == "pawn") {   //pawn has different capture moves
-                    Pawn *pawn = dynamic_cast<Pawn *>(p);
-                    vector <Position> killsPossible = pawn->getCaptureMoves(Position{i, j});
-                    movesPossible.insert(movesPossible.end(), killsPossible.begin(), killsPossible.end());
-                }
+                // if (p->getType() == "pawn") {   //pawn has different capture moves
+                //     Pawn *pawn = dynamic_cast<Pawn *>(p);
+                //     vector <Position> killsPossible = pawn->getCaptureMoves(Position{i, j});
+                //     movesPossible.insert(movesPossible.end(), killsPossible.begin(), killsPossible.end());
+                // }
                 int len = movesPossible.size();
                 for (int i = 0; i < len; i++) {
                     Board *b = this;
@@ -213,20 +225,23 @@ bool Board::isMovePossible(std::string colour) {
 //     for ()
 // }
 
-State Board::getState() { //this is incorrect... need stalemate
-    if (this->isCheckmate("white")) {
-        return State::WhiteCheckmate;
+string Board::getState() {
+    if (!isMovePossible("white") && !isMovePossible("black")) {
+        return "stalemate";
+    }
+    else if (this->isCheckmate("white")) {
+        return "whitecheckmate";
     }
     else if (this->isCheckmate("black")) {
-        return State::BlackCheckmate;
+        return "blackcheckmate";
     }
     else if (this->isCheck("white")) {
-        return State::WhiteCheckmate;
+        return "whitecheck";
     }
     else if (this->isCheck("black")) {
-        return State::BlackCheckmate;
+        return "blackcheck";
     }
     else {
-        return State::Normal;
+        return "normal";
     }
 }
