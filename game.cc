@@ -54,13 +54,13 @@ void Game::play() {
     string msg = "It's " + name + "'s turn! (" + colour + ")";
     display->printMsg(msg);
     //TESTINGGGG
-    // cout << "THE POssible:" << board->isMovePossible("white");
+    // //cout << "THE POssible:" << board->isMovePossible("white");
     string line;
     while (getline(cin, line)) {
-        cout << "running play game" << endl;
+        //cout << "running play game" << endl;
         istringstream ss{line};
         ss >> command;
-        cout << "Command given:  " << command << endl;
+        //cout << "Command given:  " << command << endl;
         if (command == "help") {
             display->printHelp();
             continue;
