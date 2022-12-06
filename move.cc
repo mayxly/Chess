@@ -19,12 +19,19 @@ bool Move::isValid() {
     if (curPiece->getColour() != colour) { //start pos piece does not belongs to them
         return false;
     }
+    if (isCastle()) {
+        return true;
+    }
+    if (isEnpassant()) {
+        return true;
+    }
+    cout << "Status of enpassant:" << isEnpassant() << endl;
     if (isValidPath()) {
-        // cout << "MADE IT" << endl;
+         cout << "MADE IT" << endl;
         vector <Position> validMoves = curPiece->getMoves(start);
         int len = validMoves.size();
         if (!pieceToKill) {    //no piece to kill, just move to square
-        // cout << "MADE IT2" << endl;
+         //cout << "MADE IT2" << endl;
             for (int i = 0; i < len; i++) {
                 if (validMoves[i].x == end.x && validMoves[i].y == end.y) {
                     // cout << "SECOND TIME" << validMoves[i].x << validMoves[i].y << endl;
@@ -35,6 +42,7 @@ bool Move::isValid() {
         }
         else {      //piece to kill
             if (curPiece->getType() == "pawn") { //pawn has different capture moves
+            cout << "goes into pawn" << endl;
                 Pawn *pawn = dynamic_cast<Pawn *>(curPiece);
                 validMoves = pawn->getCaptureMoves(start);
             }
@@ -164,9 +172,8 @@ bool Move::isValidPath() {
 }
 
 string Move::getMoveType() {
-    if (isCastle())
-        return "castle";
     if (isValid()) {
+        cout << "is a valid move" << endl;
         if (isEnpassant())
             return "enpassant";
         else if (isPromotepawn())
@@ -185,6 +192,7 @@ string Move::getMoveType() {
 bool Move::isEnpassant() {
     Position pawnPos = board->getRecentPawnPos();
     if (pawnPos.x == -1 && pawnPos.y == -1) { //pawn did not move on prev turn
+    cout << "does it fail here" << endl;
         return false;
     }
     Piece *curPiece = board->getSquare(start.x, start.y).getPiece();
@@ -201,9 +209,16 @@ bool Move::isEnpassant() {
         if (!(pawnPos.x == end.x+1 && pawnPos.y == end.y)) { //not killing the correct pawn that just moved
             return false;
         }
+        cout << "does it enter here" << endl;
+        if (pawnPos.x != 3) {
+            return false;
+        }
     } else {
         pawnToKill = board->getSquare(end.x-1, end.y).getPiece();
         if (!(pawnPos.x == end.x-1 && pawnPos.y == end.y)) { //not killing the correct pawn that just moved
+            return false;
+        }
+        if (pawnPos.x != 4) {
             return false;
         }
     }
@@ -276,6 +291,7 @@ void Move::normalMove() {
     board->getSquare(end.x, end.y).setPiece(moving);
     if (moving->getType() == "pawn") {
         moving->setHasMoved(true);
+        board->setRecentPawnPos(board->getSquare(end.x, end.y).getPosition());
     }
 }
 
@@ -324,6 +340,7 @@ void Move::promoteMove(string promoteTo) {
 
 bool Move::castleMove() {
     cout << "entering castle move" << endl;
+
     Square starting = board->getSquare(start.x, start.y);
     // Square ending = board->getSquare(end.x, end.y);
     Piece *moving = starting.getPiece();
@@ -359,6 +376,17 @@ bool Move::castleMove() {
     board->getSquare(end.x, end.y).setPiece(moving);
     moving->setHasMoved(true);
     return true;
+}
+
+void Move::enpassantMove() {
+    Square starting = board->getSquare(start.x, start.y);
+    // Square ending = board->getSquare(end.x, end.y);
+    Piece *moving = starting.getPiece();
+    // cout << moving->getColour() << " =/= " << colour << endl;
+    board->getSquare(start.x, start.y).setPiece(nullptr);
+    board->getSquare(start.x, end.y).setPiece(nullptr);
+    board->getSquare(end.x, end.y).setPiece(moving);
+    moving->setHasMoved(true);
 }
 
 // Move::~Move() {}

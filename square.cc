@@ -18,3 +18,7 @@ void Square::setPiece(Piece *piece) {
 Piece* Square::getPiece() {
    return piece;
 }
+
+Position Square::getPosition() {
+   return position;
+}

@@ -13,6 +13,7 @@ public:
 //  ~Square();
  void setPiece(Piece *piece);
  Piece* getPiece();
+ Position getPosition();
 };
 
 #endif

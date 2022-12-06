@@ -28,6 +28,7 @@ public:
     void killMove();
     void promoteMove(std::string promoteTo);
     bool castleMove();
+    void enpassantMove();
 };
 
 #endif
