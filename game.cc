@@ -99,6 +99,7 @@ void Game::setup() {
             cin >> cmd;
             if (cmd == "done") {
                 // cout << "STATE " << board->getState() << endl;
+                board->getMovesPossible("white");
                 int retval = board->isValid();
                 if (retval == 0) {
                     display->printMsg("Set up complete!\n");
@@ -143,8 +144,16 @@ void Game::initGame() {
     string name2;
     string w_player;
     string b_player;
-    cin >> w_player;
-    cin >> b_player;
+    while (1) {
+        cin >> w_player;
+        cin >> b_player;
+        if ((w_player == "human" || w_player.substr(0, 8) == "computer") && (b_player == "human" || b_player.substr(0, 8) == "computer")) {
+            break;
+        } else {
+            display->printMsg("Incorrect input. Enter it in the form:");
+            display->printMsg("<human/computer[1-4+]> <human/computer[1-4+]>");
+        }
+    }
     display->printMsg("Enter player1's name:");
     cin >> name1;
     if (w_player == "human")
@@ -253,11 +262,6 @@ void Game::move(string startPos, string endPos, string upgrade) {
         Position start{startx, starty};
         Position end{endx, endy};
         Move theMove{board, start, end, currPlayer->getColour()};
-        if (theMove.isKingSafe()) {
-            // cout << "VALID" << endl;
-        } else {
-            // cout << "INVALID" << endl;
-        }
         string moveType = theMove.getMoveType();
         if (moveType == "enpassant") {
             theMove.enpassantMove();
@@ -319,7 +323,7 @@ void Game::move(string startPos, string endPos, string upgrade) {
                     display->printMsg("Black is in check.");
                 }
             }
-            if ( turn != 0) {
+            if (turn != 0) {
                 turn++;
                 if ((turn % 2) != 0) {
                     currPlayer = player1;
