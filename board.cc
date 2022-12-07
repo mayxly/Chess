@@ -146,7 +146,7 @@ int Board::isValid() {
             }
         }
     }
-    if (wKingCount > 1 || bKingCount > 1) {//ONE WHITE KING ONE BLACK ONLY
+    if (wKingCount != 1 || bKingCount != 1) {//ONE WHITE KING ONE BLACK ONLY
         return 1;
     }
 
@@ -271,7 +271,7 @@ bool Board::isMovePossible(std::string colour) {
 }
 
 vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
-    cout << "entered" << endl;
+    // cout << "entered" << endl;
     vector <pair<Position, Position>> retval;
     vector <Position> movesPossible;
     for (int i = 0; i < 8; i++) { //check each piece for possible moves to move/kill
@@ -301,15 +301,15 @@ vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
             }
         }
     }
-    random_device rd;
-    mt19937 g(rd());
-    shuffle(retval.begin(), retval.end(), g);
-    shuffle(retval.begin(), retval.end(), g);
-    //random_shuffle(retval.begin(), retval.end());
-   // random_shuffle(retval.begin(), retval.end());
-    for (auto movepair: retval) {
-        cout << movepair.first.x << movepair.first.y << " to " << movepair.second.x << movepair.second.y << endl;
-    }
+    // random_device rd;
+    // mt19937 g(rd());
+    // shuffle(retval.begin(), retval.end(), g);
+    // shuffle(retval.begin(), retval.end(), g);
+    random_shuffle(retval.begin(), retval.end());
+    random_shuffle(retval.begin(), retval.end());
+    // for (auto movepair: retval) {
+    //     cout << movepair.first.x << movepair.first.y << " to " << movepair.second.x << movepair.second.y << endl;
+    // }
     return retval;
 }
 
