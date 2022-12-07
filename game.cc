@@ -230,7 +230,7 @@ void Game::addPiece(char piece, string square) {
 }
 
 
-void Game::removePiece(string square) {
+    void Game::removePiece(string square) {
     int x = abs((square[1] - '1')-7);
     int y = square[0] - 'a';
     if (!isValidPos(square)) {
@@ -238,17 +238,17 @@ void Game::removePiece(string square) {
     }
     board->getSquare(x, y).setPiece(nullptr);
     display->printBoard(board); 
-}
+    }
 
-void Game::move(string startPos, string endPos, string upgrade) {
+    void Game::move(string startPos, string endPos, string upgrade) {
     Player *currPlayer;
     // cout << "Turn count: " << turn << endl;
     if ((turn % 2) != 0) {
         currPlayer = player1;
     } else {
+        cout << "here????????" << endl;
         currPlayer = player2;
     }
-
     //human move
     if (dynamic_cast<Human *>(currPlayer)) {
         if (!isValidPos(startPos) || !isValidPos(endPos)) {
@@ -267,7 +267,7 @@ void Game::move(string startPos, string endPos, string upgrade) {
             theMove.enpassantMove();
             turn++;
         } 
-         if (moveType == "castle") {
+            if (moveType == "castle") {
             if (board->getSquare(start.x, start.y).getPiece()->gethasMoved()) {
                 display->printMsg("Not a valid move. Try again!");
             }
@@ -330,6 +330,127 @@ void Game::move(string startPos, string endPos, string upgrade) {
                 } else {
                     currPlayer = player2;
                 }
+                
+                string name = currPlayer->getName();
+                cout << "entering here" << endl;
+                string colour = currPlayer->getColour();
+                cout << "entering her2" << endl;
+                string msg = "It's " + name + "'s turn! (" + colour + ")";
+                display->printMsg(msg);
+            }
+        }
+    } // computer Move
+    else if (dynamic_cast<Computer *>(currPlayer)) {
+        Computer *c = dynamic_cast<Computer *>(currPlayer);
+        Computer cPlayer{c->getLevel(), c->getColour(), c->getName()};
+        pair<Position, Position> compMove = cPlayer.getMove(board);
+        int startx = compMove.first.x;
+        int starty = compMove.first.y;
+        int endx = compMove.second.x;
+        int endy = compMove.second.y;
+        Position start{startx, starty};
+        Position end{endx, endy};
+        Move cMove{board, start, end, c->getColour()};
+
+        string moveType = cMove.getMoveType();
+
+        if (moveType == "enpassant")
+        {
+            cMove.enpassantMove();
+        }
+        else if (moveType == "castle")
+        {
+            if (board->getSquare(start.x, start.y).getPiece()->gethasMoved())
+            {
+                display->printMsg("Not a valid move. Try again!");
+            }
+            bool rookMove = cMove.castleMove(); // return true if rook hasn't moved before and false otherwise
+            if (!rookMove)
+            {
+                display->printMsg("Not a valid move. Try again!");
+            }
+        }
+        else if (moveType == "promotepawn")
+        {
+            if (upgrade != "rook" && upgrade != "knight" && upgrade != "bishop" && upgrade != "queen")
+            {
+                display->printMsg("Invalid piece, please try again!");
+            }
+            else
+            {
+                string promote = "queen";
+                cMove.promoteMove(promote);
+            }
+        }
+        else if (moveType == "normalkill")
+        {
+            cMove.killMove();
+        }
+        else if (moveType == "normalmove")
+        {
+            if (board->getSquare(start.x, start.y).getPiece()->getType() == "pawn")
+            {
+                int wdistance = start.x - end.x;
+                int bdistance = end.x - start.x;
+                if (board->getSquare(start.x, start.y).getPiece()->gethasMoved() && (wdistance > 1 || bdistance > 1))
+                {
+                    display->printMsg("Not a valid move. Try again!");
+                }
+                else
+                {
+                    cMove.normalMove();
+                }
+            }
+            else
+            {
+                cMove.normalMove();
+            }
+        }
+        else if (moveType == "Invalid move")
+        {
+            display->printMsg("Invalid Move, try again!");
+        }
+        if (moveType != "Invalid move")
+        {
+            display->printBoard(board);
+            string state = board->getState();
+            if (state != "normal")
+            {
+                if (state == "stalemate")
+                {
+                    display->printMsg("Stalemate!");
+                    turn = 0;
+                }
+                else if (state == "whitecheckmate")
+                {
+                    display->printMsg("Checkmate! White wins!");
+                    turn = 0;
+                }
+                else if (state == "blackcheckmate")
+                {
+                    display->printMsg("Checkmate! Black wins!");
+                    turn = 0;
+                }
+                else if (state == "whitecheck")
+                {
+                    display->printMsg("White is in check.");
+                }
+                else if (state == "blackcheck")
+                {
+                    display->printMsg("Black is in check.");
+                }
+            }
+            if (turn != 0)
+            {
+                turn++;
+                if ((turn % 2) != 0)
+                {
+                    currPlayer = player1;
+                }
+                else
+                {
+                    currPlayer = player2;
+                }
                 string name = currPlayer->getName();
                 string colour = currPlayer->getColour();
                 string msg = "It's " + name + "'s turn! (" + colour + ")";
@@ -339,11 +460,13 @@ void Game::move(string startPos, string endPos, string upgrade) {
     }
 }
 
-bool Game::isValidPos(string square) {
-    int x = abs((square[1] - '1')-7);
+bool Game::isValidPos(string square)
+{
+    int x = abs((square[1] - '1') - 7);
     int y = square[0] - 'a';
 
-    if (x < 0 || x > 7 || y < 0 || y > 7 || square[1] < '1' || square[1] > '8') {
+    if (x < 0 || x > 7 || y < 0 || y > 7 || square[1] < '1' || square[1] > '8')
+    {
         display->printMsg("Not a valid coordinate. Try again.");
         return false;
     }

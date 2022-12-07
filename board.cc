@@ -1,6 +1,7 @@
 #include "board.h"
 #include "move.h"
 #include <algorithm>
+#include <random>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -300,9 +301,12 @@ vector <pair<Position, Position>> Board::getMovesPossible(std::string colour) {
             }
         }
     }
-
-    random_shuffle(retval.begin(), retval.end());
-    random_shuffle(retval.begin(), retval.end());
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(retval.begin(), retval.end(), g);
+    shuffle(retval.begin(), retval.end(), g);
+    //random_shuffle(retval.begin(), retval.end());
+   // random_shuffle(retval.begin(), retval.end());
     for (auto movepair: retval) {
         cout << movepair.first.x << movepair.first.y << " to " << movepair.second.x << movepair.second.y << endl;
     }
