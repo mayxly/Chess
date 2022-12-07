@@ -63,7 +63,7 @@ bool Move::isValid() {
 }
 
 bool Move::isKingSafe() {
-    bool safe = true;
+    bool safe = false;
     if (isValid()) { 
     // Board *cloneBoard = new Board{"setup"};
     Board cloneBoard = *board;
@@ -98,8 +98,9 @@ bool Move::isKingSafe() {
         else if (colour == "black" && cloneBoard.isCheck("black")) {
             // cout << "KING UNSAFE" << endl;
             safe = false;
+        } else {
+            safe = true;
         }
-    
     }
     return safe;
 }

@@ -23,10 +23,10 @@ pair<Position, Position> Computer::getMove(Board *b) {
 
 pair<Position, Position> Computer::getLevel1Move(Board *b) {
     vector<pair<Position, Position>> allMoves = b->getMovesPossible(getColour());
-    std::random_device rd;
-    std::mt19937 g(rd());
-    shuffle(allMoves.begin(), allMoves.end(), g);
-    // random_shuffle(allMoves.begin(), allMoves.end());
+    // std::random_device rd;
+    // std::mt19937 g(rd());
+    // shuffle(allMoves.begin(), allMoves.end(), g);
+    random_shuffle(allMoves.begin(), allMoves.end());
     for (auto move : allMoves) {
         Position start = move.first;
         Position end = move.second;
@@ -43,10 +43,10 @@ pair<Position, Position> Computer::getLevel2Move(Board *b) {
     vector<pair<Position, Position>> checkMoves;
     vector<pair<Position, Position>> killMoves;
     vector<pair<Position, Position>> normalMoves;
-    random_device rd;
-    mt19937 g(rd());
-    shuffle(allMoves.begin(), allMoves.end(), g);
-    // random_shuffle(allMoves.begin(), allMoves.end());
+    // random_device rd;
+    // mt19937 g(rd());
+    // shuffle(allMoves.begin(), allMoves.end(), g);
+    random_shuffle(allMoves.begin(), allMoves.end());
     for (auto move : allMoves) {
         Position start = move.first;
         Position end = move.second;

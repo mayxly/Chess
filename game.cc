@@ -107,7 +107,7 @@ void Game::setup() {
                     break;
                 } else {
                     if (retval == 1) {
-                        display->printMsg("Invalid board: More than one king. Please configure again.\n");
+                        display->printMsg("Invalid board: One king of each colour necessary. Please configure again.\n");
                     } else if (retval == 2) {
                         display->printMsg("Invalid board: Pawn on first or last row. Please configure again.\n");
                     } else {
@@ -172,11 +172,11 @@ void Game::initGame() {
     {
         player2 = new Human{"black", name2};
     }
-    else if (b_player == "computer")
+    else if (b_player.substr(0, 8) == "computer")
     {
-        char levl = w_player[9];
+        char levl = b_player[9];
         int level = levl - '0';
-        player2 = new Computer{level, "white", name2};
+        player2 = new Computer{level, "black", name2};
     }
 }
 
@@ -246,11 +246,12 @@ void Game::addPiece(char piece, string square) {
     if ((turn % 2) != 0) {
         currPlayer = player1;
     } else {
-        cout << "here????????" << endl;
+        // cout << "here????????" << endl;
         currPlayer = player2;
     }
     //human move
     if (dynamic_cast<Human *>(currPlayer)) {
+        // cout << "THIS IS A HUMAN" << endl;
         if (!isValidPos(startPos) || !isValidPos(endPos)) {
             return;
         }
@@ -265,7 +266,6 @@ void Game::addPiece(char piece, string square) {
         string moveType = theMove.getMoveType();
         if (moveType == "enpassant") {
             theMove.enpassantMove();
-            turn++;
         } 
             if (moveType == "castle") {
             if (board->getSquare(start.x, start.y).getPiece()->gethasMoved()) {
@@ -330,17 +330,16 @@ void Game::addPiece(char piece, string square) {
                 } else {
                     currPlayer = player2;
                 }
-                
                 string name = currPlayer->getName();
-                cout << "entering here" << endl;
+                // cout << "entering here" << endl;
                 string colour = currPlayer->getColour();
-                cout << "entering her2" << endl;
+                // cout << "entering her2" << endl;
                 string msg = "It's " + name + "'s turn! (" + colour + ")";
                 display->printMsg(msg);
             }
         }
-    } // computer Move
-    else if (dynamic_cast<Computer *>(currPlayer)) {
+    } else {
+        // cout << "THIS IS A COMPUTER" << endl;
         Computer *c = dynamic_cast<Computer *>(currPlayer);
         Computer cPlayer{c->getLevel(), c->getColour(), c->getName()};
         pair<Position, Position> compMove = cPlayer.getMove(board);
@@ -455,6 +454,7 @@ void Game::addPiece(char piece, string square) {
                 string colour = currPlayer->getColour();
                 string msg = "It's " + name + "'s turn! (" + colour + ")";
                 display->printMsg(msg);
+                
             }
         }
     }
